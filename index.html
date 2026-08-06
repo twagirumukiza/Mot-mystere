@@ -101,6 +101,12 @@
             color: var(--accent);
         }
 
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         /* Grille et Liste */
         .game-layout {
             display: flex;
@@ -212,6 +218,14 @@
             background-color: var(--danger-hover);
         }
 
+        .btn-secondary {
+            background-color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
         .hidden {
             display: none !important;
         }
@@ -223,6 +237,42 @@
             border: 2px dashed var(--accent);
             border-radius: 10px;
             margin-top: 20px;
+        }
+
+        /* Modal des Règles */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 12px;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: #818cf8;
+        }
+
+        .modal-content p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
 
         footer {
@@ -240,7 +290,10 @@
     <p class="subtitle">Trouvez les mots cachés dans la grille et découvrez le mot mystère final !</p>
 
     <div class="container" id="menu-screen">
-        <h2>Choisissez un thème :</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h2 style="margin: 0;">Choisissez un thème :</h2>
+            <button class="btn-action btn-secondary" style="width: auto; padding: 8px 14px;" onclick="openRules()">Règles du jeu</button>
+        </div>
         <div class="theme-grid" id="theme-grid"></div>
     </div>
 
@@ -248,7 +301,10 @@
         <div class="game-header">
             <div class="stat-box">Thème : <span id="current-theme-name" class="stat-value"></span></div>
             <div class="stat-box">Score : <span id="current-score" class="stat-value">0</span> / <span id="target-score">0</span> pts</div>
-            <button class="btn-action" style="width: auto; padding: 6px 12px;" onclick="returnToMenu()">Changer de thème</button>
+            <div class="header-actions">
+                <button class="btn-action btn-secondary" style="width: auto; padding: 6px 12px;" onclick="openRules()">Règles</button>
+                <button class="btn-action btn-secondary" style="width: auto; padding: 6px 12px;" onclick="returnToMenu()">Changer de thème</button>
+            </div>
         </div>
 
         <div class="game-layout">
@@ -270,6 +326,18 @@
         <div id="victory-box" class="victory-message hidden">
             <h2>🎉 Partie Terminée ! 🎉</h2>
             <p id="victory-text"></p>
+        </div>
+    </div>
+
+    <!-- Modale des Règles -->
+    <div id="rules-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Règles du jeu</h3>
+            <p><strong>1. But du jeu :</strong> Trouvez tous les mots cachés dans la grille pour marquer un maximum de points et découvrez le mot mystère final grâce aux indices.</p>
+            <p><strong>2. Sélection des mots :</strong> Cliquez sur les lettres de la grille pour sélectionner les mots. Vous pouvez cliquer sur les lettres dans l'ordre de votre choix (gauche à droite, droite à gauche, haut en bas ou bas en haut), tant qu'elles forment une ligne valide dans la grille.</p>
+            <p><strong>3. Phrase d'indice :</strong> La phrase d'indice se complète automatiquement au fur et à mesure que vous trouvez les mots cachés.</p>
+            <p><strong>4. Score & Victoire :</strong> Chaque mot trouvé rapporte des points proportionnels à sa longueur. Trouver le mot mystère rapporte un bonus de 100 points !</p>
+            <button class="btn-action" onclick="closeRules()">Compris !</button>
         </div>
     </div>
 
@@ -364,6 +432,14 @@
         themeGridEl.appendChild(btn);
     }
 
+    function openRules() {
+        document.getElementById('rules-modal').classList.remove('hidden');
+    }
+
+    function closeRules() {
+        document.getElementById('rules-modal').classList.add('hidden');
+    }
+
     function returnToMenu() {
         document.getElementById('game-screen').classList.add('hidden');
         document.getElementById('menu-screen').classList.remove('hidden');
@@ -436,7 +512,6 @@
                         coords.push({r: cr, c: cc});
                     }
 
-                    // Détermination des indices à révéler selon la longueur du mot
                     let hintCount = word.length <= 5 ? 1 : (word.length <= 10 ? 2 : 3);
                     let hintIndices = [];
                     while(hintIndices.length < hintCount && hintIndices.length < word.length) {
@@ -452,7 +527,6 @@
             }
         });
 
-        // Remplir les lettres vides par des lettres aléatoires
         const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         for (let r = 0; r < gridSize; r++) {
             for (let c = 0; c < gridSize; c++) {
@@ -520,37 +594,52 @@
             selectedCells.push({r, c});
         }
 
-        let currentString = selectedCells.map(coord => gridData[coord.r][coord.c]).join('');
-        let reversedString = [...currentString].reverse().join('');
+        // Vérification par correspondance exacte des coordonnées (indépendamment de l'ordre de clic)
+        let foundMatched = false;
+        placedWords.forEach(pw => {
+            if (!pw.found && selectedCells.length === pw.coords.length) {
+                const allMatch = pw.coords.every(coord => 
+                    selectedCells.some(sc => sc.r === coord.r && sc.c === coord.c)
+                );
+                if (allMatch) {
+                    pw.found = true;
+                    foundWordsCount++;
+                    score += pw.word.length * 10;
+                    foundMatched = true;
 
-        placedWords.forEach((pw, idx) => {
-            if (!pw.found && (pw.word === currentString || pw.word === reversedString)) {
-                pw.found = true;
-                foundWordsCount++;
-                score += pw.word.length * 10;
-                document.getElementById('current-score').innerText = score;
-                
-                renderWordsList();
-                updateMysteryHint();
-
-                pw.coords.forEach(coord => {
-                    const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
-                    if (el) el.classList.add('found');
-                });
-
-                document.querySelectorAll('.grid-cell.selected').forEach(el => el.classList.remove('selected'));
-                selectedCells = [];
+                    pw.coords.forEach(coord => {
+                        const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
+                        if (el) {
+                            el.classList.remove('selected');
+                            el.classList.add('found');
+                        }
+                    });
+                }
             }
         });
+
+        if (foundMatched) {
+            selectedCells = [];
+            document.querySelectorAll('.grid-cell.selected').forEach(el => {
+                if (!el.classList.contains('found')) {
+                    el.classList.remove('selected');
+                }
+            });
+            
+            renderWordsList();
+            updateMysteryHint();
+
+            if (foundWordsCount === placedWords.length) {
+                // Tous les mots ont été trouvés par la grille
+            }
+        }
     }
 
     function checkMysteryWord() {
         const inputVal = document.getElementById('mystery-input').value.trim().toUpperCase();
         if (inputVal === currentTheme.mystery) {
-            score += 100; // Bonus mot mystère
+            score += 100;
             document.getElementById('current-score').innerText = score;
-            
-            // Révéler tous les mots restants si ce n'est pas déjà fait
             revealAllRemaining();
             triggerVictory("Bravo ! Vous avez trouvé le mot mystère et tous les mots cachés !");
         } else {
@@ -559,7 +648,7 @@
     }
 
     function revealAllRemaining() {
-        placedWords.forEach((pw, idx) => {
+        placedWords.forEach((pw) => {
             if (!pw.found) {
                 pw.found = true;
                 pw.coords.forEach(coord => {
