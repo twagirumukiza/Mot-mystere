@@ -28,6 +28,7 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            box-sizing: border-box;
         }
 
         h1 {
@@ -148,7 +149,7 @@
 
         .sidebar {
             flex: 1;
-            min-width: 240px;
+            min-width: 260px;
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -161,7 +162,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            max-height: 320px;
+            max-height: 280px;
             overflow-y: auto;
         }
 
@@ -174,7 +175,7 @@
             justify-content: space-between;
             align-items: center;
             border: 1px solid var(--border);
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             font-family: monospace;
         }
 
@@ -223,6 +224,14 @@
             border-radius: 10px;
             margin-top: 20px;
         }
+
+        footer {
+            margin-top: 30px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-align: center;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
@@ -250,7 +259,7 @@
                 
                 <div id="mystery-container" style="margin-top:auto; display:flex; flex-direction:column; gap:8px;">
                     <h4>Mot Mystère :</h4>
-                    <p id="mystery-hint" style="color: var(--text-muted); font-size: 0.9rem; margin-top:0;">Trouvez tous les mots pour révéler l'indice final.</p>
+                    <p id="mystery-hint" style="color: var(--text-muted); font-size: 0.85rem; margin-top:0; line-height: 1.4;">Indice : ...</p>
                     <input type="text" id="mystery-input" placeholder="Votre réponse..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: #0f172a; color: white; box-sizing: border-box;">
                     <button class="btn-action" onclick="checkMysteryWord()">Valider le Mot Mystère</button>
                     <button class="btn-action btn-danger" onclick="giveUpMystery()">Donner sa langue au chat</button>
@@ -264,19 +273,76 @@
         </div>
     </div>
 
+    <footer>by twagirumukiza</footer>
+
 <script>
     const themesData = {
-        cuisine: { name: "Cuisine", words: ["FOUR", "CHEF", "PLAT", "MENU", "SEL", "POIVRE", "SAUCE", "POELE"], mystery: "RECETTE" },
-        animaux: { name: "Animaux", words: ["CHAT", "CHIEN", "LION", "TIGRE", "LOUP", "OURS", "AIGLE", "ZEBRE"], mystery: "SAUVAGE" },
-        histoire: { name: "Histoire", words: ["ROI", "PAIX", "ARME", "SIEGE", "DATE", "FORT", "TRONE"], mystery: "EMPIRE" },
-        litterature: { name: "Littérature", words: ["LIVRE", "PAGE", "PROSE", "RECIT", "TOME", "AUTEUR", "MOT"], mystery: "ROMAN" },
-        theatre: { name: "Théâtre", words: ["SCENE", "ACTEUR", "ROLE", "TEXTE", "DECOR", "SALLE", "DRAME"], mystery: "RIDEAU" },
-        danse: { name: "Danse", words: ["BAL", "PAS", "TANGO", "VALSE", "SALSA", "CORPS", "RYTHME"], mystery: "BALLET" },
-        sport: { name: "Sport", words: ["BALLON", "COURIR", "MATCH", "SCORE", "EQUIPE", "JEU", "CHAMP"], mystery: "VICTOIRE" },
-        football: { name: "Football", words: ["BUT", "STADE", "ARBITRE", "TACLE", "MATCH", "JOUEUR", "FAUTE"], mystery: "TROPHEE" },
-        informatique: { name: "Informatique", words: ["CODE", "BUG", "LIGNE", "DATA", "RESEAU", "WEB", "CLIC"], mystery: "LOGICIEL" },
-        musique: { name: "Musique", words: ["NOTE", "RYTHME", "BASS", "VOIX", "CD", "SON", "OPERA"], mystery: "MELODIE" },
-        cinema: { name: "Cinéma", words: ["FILM", "PLAN", "ACTEUR", "SCENE", "CADRE", "SALLE", "STAR"], mystery: "CAMERA" }
+        cuisine: { 
+            name: "Cuisine", 
+            words: ["FOUR", "CHEF", "PLAT", "MENU", "SEL", "POIVRE", "SAUCE", "POELE"], 
+            mystery: "RECETTE", 
+            hint: "Le [CHEF] prépare un [PLAT] sur une [POELE] avec du [SEL] et du [POIVRE], rédige un [MENU] et utilise le [FOUR] et une [SAUCE] pour réussir sa..." 
+        },
+        animaux: { 
+            name: "Animaux", 
+            words: ["CHAT", "CHIEN", "LION", "TIGRE", "LOUP", "OURS", "AIGLE", "ZEBRE"], 
+            mystery: "SAUVAGE", 
+            hint: "Le [LION] et le [TIGRE] côtoient le [LOUP] et l'[OURS], tandis que le [CHAT], le [CHIEN], le [ZEBRE] et l'[AIGLE] vivent en milieu..." 
+        },
+        histoire: { 
+            name: "Histoire", 
+            words: ["ROI", "PAIX", "ARME", "SIEGE", "DATE", "FORT", "TRONE"], 
+            mystery: "EMPIRE", 
+            hint: "Sous le règne d'un [ROI], la [PAIX] est signée après un long [SIEGE], marquant la [DATE] clé d'un nouveau..." 
+        },
+        litterature: { 
+            name: "Littérature", 
+            words: ["LIVRE", "PAGE", "PROSE", "RECIT", "TOME", "AUTEUR", "MOT"], 
+            mystery: "ROMAN", 
+            hint: "Dans ce [LIVRE], chaque [PAGE] de [PROSE] et chaque [TOME] rédigé par l'[AUTEUR] contient plus d'un..." 
+        },
+        theatre: { 
+            name: "Théâtre", 
+            words: ["SCENE", "ACTEUR", "ROLE", "TEXTE", "DECOR", "SALLE", "DRAME"], 
+            mystery: "RIDEAU", 
+            hint: "Sur la [SCENE], l'[ACTEUR] incarne son [ROLE] avec un [TEXTE] précis, devant un [DECOR] magnifique dans une..." 
+        },
+        danse: { 
+            name: "Danse", 
+            words: ["BAL", "PAS", "TANGO", "VALSE", "SALSA", "CORPS", "RYTHME"], 
+            mystery: "BALLET", 
+            hint: "Pour le [BAL], chaque [PAS] de [TANGO], de [VALSE] ou de [SALSA] demande au [CORPS] de suivre le bon..." 
+        },
+        sport: { 
+            name: "Sport", 
+            words: ["BALLON", "COURIR", "MATCH", "SCORE", "EQUIPE", "JEU", "CHAMP"], 
+            mystery: "VICTOIRE", 
+            hint: "Durant le [MATCH], l'[EQUIPE] donne tout pour marquer un [BUT] (ou un [SCORE]) et décrocher la..." 
+        },
+        football: { 
+            name: "Football", 
+            words: ["BUT", "STADE", "ARBITRE", "TACLE", "MATCH", "JOUEUR", "FAUTE"], 
+            mystery: "TROPHEE", 
+            hint: "Sur la pelouse du [STADE], l'[ARBITRE] siffle la [FAUTE], le [JOUEUR] évite le [TACLE] pendant le [MATCH] pour remporter le..." 
+        },
+        informatique: { 
+            name: "Informatique", 
+            words: ["CODE", "BUG", "LIGNE", "DATA", "RESEAU", "WEB", "CLIC"], 
+            mystery: "LOGICIEL", 
+            hint: "En écrivant ce [CODE], le développeur corrige un [BUG] [LIGNE] par [LIGNE] pour faire tourner le..." 
+        },
+        musique: { 
+            name: "Musique", 
+            words: ["NOTE", "RYTHME", "BASS", "VOIX", "CD", "SON", "OPERA"], 
+            mystery: "MELODIE", 
+            hint: "Une simple [NOTE] et un bon [RYTHME] portés par la [VOIX] ou la [BASS] créent une magnifique..." 
+        },
+        cinema: { 
+            name: "Cinéma", 
+            words: ["FILM", "PLAN", "ACTEUR", "SCENE", "CADRE", "SALLE", "STAR"], 
+            mystery: "CAMERA", 
+            hint: "Pour ce [FILM], chaque [PLAN] et chaque [SCENE] demandent à l'[ACTEUR] et la [STAR] de poser devant la..." 
+        }
     };
 
     let currentTheme = null;
@@ -311,6 +377,7 @@
         document.getElementById('game-screen').classList.remove('hidden');
         document.getElementById('victory-box').classList.add('hidden');
         document.getElementById('mystery-input').value = "";
+        document.getElementById('mystery-hint').innerText = "Indice : " + currentTheme.hint;
         
         score = 0;
         foundWordsCount = 0;
@@ -368,7 +435,21 @@
                         gridData[cr][cc] = word[i];
                         coords.push({r: cr, c: cc});
                     }
-                    placedWords.push({word, coords, found: false});
+
+                    // Détermination des indices à révéler selon la longueur du mot
+                    // L <= 5 : 1 lettre d'indice
+                    // 5 < L <= 10 : jusqu'à 2 lettres d'indice
+                    // L > 10 : jusqu'é 3 lettres d'indice
+                    let hintCount = word.length <= 5 ? 1 : (word.length <= 10 ? 2 : 3);
+                    let hintIndices = [];
+                    while(hintIndices.length < hintCount && hintIndices.length < word.length) {
+                        let randIdx = Math.floor(Math.random() * word.length);
+                        if(!hintIndices.includes(randIdx)) {
+                            hintIndices.push(randIdx);
+                        }
+                    }
+
+                    placedWords.push({word, coords, found: false, hintIndices});
                     placed = true;
                 }
             }
@@ -400,9 +481,17 @@
             li.className = 'word-item';
             li.id = `word-item-${index}`;
             
-            // Affichage masqué : ex -> _ _ _ _ au lieu du mot
-            const maskedWord = item.word.split('').map(() => '_').join(' ');
-            li.innerHTML = `<span>${maskedWord}</span> <span>+${item.word.length * 10} pts</span>`;
+            // Création de l'affichage masqué avec les lettres indices révélées
+            let maskedArr = [];
+            for(let i=0; i<item.word.length; i++) {
+                if(item.hintIndices.includes(i)) {
+                    maskedArr.push(item.word[i]);
+                } else {
+                    maskedArr.push('_');
+                }
+            }
+            const maskedStr = maskedArr.join(' ');
+            li.innerHTML = `<span>${maskedStr}</span> <span>+${item.word.length * 10} pts</span>`;
             listEl.appendChild(li);
         });
     }
@@ -426,7 +515,6 @@
                 score += pw.word.length * 10;
                 document.getElementById('current-score').innerText = score;
                 
-                // Mettre à jour l'affichage du mot trouvé dans la liste
                 const wordLi = document.getElementById(`word-item-${idx}`);
                 wordLi.classList.add('found');
                 wordLi.innerHTML = `<span>${pw.word}</span> <span>✓</span>`;
@@ -438,8 +526,6 @@
 
                 document.querySelectorAll('.grid-cell.selected').forEach(el => el.classList.remove('selected'));
                 selectedCells = [];
-
-                checkGameWin();
             }
         });
     }
@@ -456,14 +542,25 @@
     }
 
     function giveUpMystery() {
+        // Révéler le mot mystère
         document.getElementById('mystery-input').value = currentTheme.mystery;
-        triggerVictory("Dommage ! Le mot mystère était : " + currentTheme.mystery);
-    }
 
-    function checkGameWin() {
-        if (foundWordsCount === placedWords.length) {
-            document.getElementById('mystery-hint').innerText = "Indice : Le mot mystère est lié au thème (" + currentTheme.mystery.length + " lettres).";
-        }
+        // Révéler tous les mots restants dans la liste
+        placedWords.forEach((pw, idx) => {
+            if (!pw.found) {
+                pw.found = true;
+                const wordLi = document.getElementById(`word-item-${idx}`);
+                wordLi.classList.add('found');
+                wordLi.innerHTML = `<span>${pw.word}</span> <span>👁️</span>`;
+
+                pw.coords.forEach(coord => {
+                    const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
+                    if (el) el.classList.add('found');
+                });
+            }
+        });
+
+        triggerVictory("Dommage ! Le mot mystère était : " + currentTheme.mystery);
     }
 
     function triggerVictory(message) {
