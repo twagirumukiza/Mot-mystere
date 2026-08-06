@@ -13,6 +13,8 @@
             --text-color: #f8fafc;
             --text-muted: #94a3b8;
             --accent: #22c55e;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
             --border: #334155;
         }
 
@@ -43,7 +45,7 @@
 
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
             background: var(--card-bg);
             border-radius: 16px;
             padding: 25px;
@@ -146,7 +148,7 @@
 
         .sidebar {
             flex: 1;
-            min-width: 220px;
+            min-width: 240px;
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -159,6 +161,8 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            max-height: 320px;
+            overflow-y: auto;
         }
 
         .word-item {
@@ -170,6 +174,8 @@
             justify-content: space-between;
             align-items: center;
             border: 1px solid var(--border);
+            letter-spacing: 1px;
+            font-family: monospace;
         }
 
         .word-item.found {
@@ -177,6 +183,8 @@
             color: var(--text-muted);
             border-color: var(--accent);
             background: rgba(34, 197, 94, 0.1);
+            letter-spacing: normal;
+            font-family: inherit;
         }
 
         .btn-action {
@@ -193,6 +201,14 @@
 
         .btn-action:hover {
             background-color: var(--primary-hover);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
         }
 
         .hidden {
@@ -231,16 +247,19 @@
             <div class="sidebar">
                 <h3>Mots à trouver :</h3>
                 <ul class="words-list" id="words-list"></ul>
-                <div id="mystery-container" style="margin-top:auto;">
+                
+                <div id="mystery-container" style="margin-top:auto; display:flex; flex-direction:column; gap:8px;">
                     <h4>Mot Mystère :</h4>
                     <p id="mystery-hint" style="color: var(--text-muted); font-size: 0.9rem; margin-top:0;">Trouvez tous les mots pour révéler l'indice final.</p>
-                    <input type="text" id="mystery-input" placeholder="Votre réponse..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: #0f172a; color: white; margin-bottom: 8px; box-sizing: border-box;">
+                    <input type="text" id="mystery-input" placeholder="Votre réponse..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: #0f172a; color: white; box-sizing: border-box;">
                     <button class="btn-action" onclick="checkMysteryWord()">Valider le Mot Mystère</button>
+                    <button class="btn-action btn-danger" onclick="giveUpMystery()">Donner sa langue au chat</button>
                 </div>
             </div>
         </div>
+
         <div id="victory-box" class="victory-message hidden">
-            <h2>🎉 Félicitations ! Partie Terminée ! 🎉</h2>
+            <h2>🎉 Partie Terminée ! 🎉</h2>
             <p id="victory-text"></p>
         </div>
     </div>
@@ -249,12 +268,12 @@
     const themesData = {
         cuisine: { name: "Cuisine", words: ["FOUR", "CHEF", "PLAT", "MENU", "SEL", "POIVRE", "SAUCE", "POELE"], mystery: "RECETTE" },
         animaux: { name: "Animaux", words: ["CHAT", "CHIEN", "LION", "TIGRE", "LOUP", "OURS", "AIGLE", "ZEBRE"], mystery: "SAUVAGE" },
-        histoire: { name: "Histoire", words: ["ROI", "PAIX", "ARME", "SIEGE", "DATE", "FORT", "TROMNE"], mystery: "EMPIRE" },
+        histoire: { name: "Histoire", words: ["ROI", "PAIX", "ARME", "SIEGE", "DATE", "FORT", "TRONE"], mystery: "EMPIRE" },
         litterature: { name: "Littérature", words: ["LIVRE", "PAGE", "PROSE", "RECIT", "TOME", "AUTEUR", "MOT"], mystery: "ROMAN" },
         theatre: { name: "Théâtre", words: ["SCENE", "ACTEUR", "ROLE", "TEXTE", "DECOR", "SALLE", "DRAME"], mystery: "RIDEAU" },
         danse: { name: "Danse", words: ["BAL", "PAS", "TANGO", "VALSE", "SALSA", "CORPS", "RYTHME"], mystery: "BALLET" },
         sport: { name: "Sport", words: ["BALLON", "COURIR", "MATCH", "SCORE", "EQUIPE", "JEU", "CHAMP"], mystery: "VICTOIRE" },
-        football: { name: "Football", words: ["BUT", "STADE", "ARBITRE", "TCL", "MATCH", "JOUEUR", "FAUTE"], mystery: "TROPHEE" },
+        football: { name: "Football", words: ["BUT", "STADE", "ARBITRE", "TACLE", "MATCH", "JOUEUR", "FAUTE"], mystery: "TROPHEE" },
         informatique: { name: "Informatique", words: ["CODE", "BUG", "LIGNE", "DATA", "RESEAU", "WEB", "CLIC"], mystery: "LOGICIEL" },
         musique: { name: "Musique", words: ["NOTE", "RYTHME", "BASS", "VOIX", "CD", "SON", "OPERA"], mystery: "MELODIE" },
         cinema: { name: "Cinéma", words: ["FILM", "PLAN", "ACTEUR", "SCENE", "CADRE", "SALLE", "STAR"], mystery: "CAMERA" }
@@ -269,7 +288,7 @@
     let selectedCells = [];
     const gridSize = 10;
 
-    // Initialisation du menu
+    // Initialisation du menu des thèmes
     const themeGridEl = document.getElementById('theme-grid');
     for (let key in themesData) {
         const btn = document.createElement('button');
@@ -312,7 +331,6 @@
         container.innerHTML = '';
         gridData = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
         
-        // Placement simplifié horizontal / vertical pour la démo interactive
         placedWords = [];
         let directions = [
             {r: 0, c: 1}, // horizontal
@@ -381,13 +399,15 @@
             const li = document.createElement('li');
             li.className = 'word-item';
             li.id = `word-item-${index}`;
-            li.innerHTML = `<span>${item.word}</span> <span>+${item.word.length * 10} pts</span>`;
+            
+            // Affichage masqué : ex -> _ _ _ _ au lieu du mot
+            const maskedWord = item.word.split('').map(() => '_').join(' ');
+            li.innerHTML = `<span>${maskedWord}</span> <span>+${item.word.length * 10} pts</span>`;
             listEl.appendChild(li);
         });
     }
 
     function selectCell(r, c, cellEl) {
-        // Logique de sélection simple par clic sur les lettres du mot
         cellEl.classList.toggle('selected');
         const index = selectedCells.findIndex(item => item.r === r && item.c === c);
         if (index > -1) {
@@ -396,26 +416,26 @@
             selectedCells.push({r, c});
         }
 
-        // Vérifier si la sélection correspond à un mot non trouvé
         let currentString = selectedCells.map(coord => gridData[coord.r][coord.c]).join('');
-        let reversedString = [...selectedString = currentString].reverse().join('');
+        let reversedString = [...currentString].reverse().join('');
 
         placedWords.forEach((pw, idx) => {
-            if (!pw.found && (pw.word === currentString || pw.word === reversedString || pw.word === [...pw.word].reverse().join(''))) {
-                // Mot trouvé !
+            if (!pw.found && (pw.word === currentString || pw.word === reversedString)) {
                 pw.found = true;
                 foundWordsCount++;
                 score += pw.word.length * 10;
                 document.getElementById('current-score').innerText = score;
-                document.getElementById(`word-item-${idx}`).classList.add('found');
+                
+                // Mettre à jour l'affichage du mot trouvé dans la liste
+                const wordLi = document.getElementById(`word-item-${idx}`);
+                wordLi.classList.add('found');
+                wordLi.innerHTML = `<span>${pw.word}</span> <span>✓</span>`;
 
-                // Colorer les cellules en vert
                 pw.coords.forEach(coord => {
                     const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
                     if (el) el.classList.add('found');
                 });
 
-                // Reset sélection
                 document.querySelectorAll('.grid-cell.selected').forEach(el => el.classList.remove('selected'));
                 selectedCells = [];
 
@@ -433,6 +453,11 @@
         } else {
             alert("Ce n'est pas le bon mot mystère. Essayez encore !");
         }
+    }
+
+    function giveUpMystery() {
+        document.getElementById('mystery-input').value = currentTheme.mystery;
+        triggerVictory("Dommage ! Le mot mystère était : " + currentTheme.mystery);
     }
 
     function checkGameWin() {
