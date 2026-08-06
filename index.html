@@ -377,7 +377,6 @@
         document.getElementById('game-screen').classList.remove('hidden');
         document.getElementById('victory-box').classList.add('hidden');
         document.getElementById('mystery-input').value = "";
-        document.getElementById('mystery-hint').innerText = "Indice : " + currentTheme.hint;
         
         score = 0;
         foundWordsCount = 0;
@@ -385,6 +384,7 @@
 
         generateGrid();
         renderWordsList();
+        updateMysteryHint();
         calculateTargetScore();
     }
 
@@ -437,9 +437,6 @@
                     }
 
                     // Détermination des indices à révéler selon la longueur du mot
-                    // L <= 5 : 1 lettre d'indice
-                    // 5 < L <= 10 : jusqu'à 2 lettres d'indice
-                    // L > 10 : jusqu'é 3 lettres d'indice
                     let hintCount = word.length <= 5 ? 1 : (word.length <= 10 ? 2 : 3);
                     let hintIndices = [];
                     while(hintIndices.length < hintCount && hintIndices.length < word.length) {
@@ -473,6 +470,18 @@
         }
     }
 
+    function getMaskedWordString(item) {
+        let maskedArr = [];
+        for(let i=0; i<item.word.length; i++) {
+            if(item.hintIndices.includes(i)) {
+                maskedArr.push(item.word[i]);
+            } else {
+                maskedArr.push('_');
+            }
+        }
+        return maskedArr.join(' ');
+    }
+
     function renderWordsList() {
         const listEl = document.getElementById('words-list');
         listEl.innerHTML = '';
@@ -481,19 +490,25 @@
             li.className = 'word-item';
             li.id = `word-item-${index}`;
             
-            // Création de l'affichage masqué avec les lettres indices révélées
-            let maskedArr = [];
-            for(let i=0; i<item.word.length; i++) {
-                if(item.hintIndices.includes(i)) {
-                    maskedArr.push(item.word[i]);
-                } else {
-                    maskedArr.push('_');
-                }
+            if (item.found) {
+                li.classList.add('found');
+                li.innerHTML = `<span>${item.word}</span> <span>✓</span>`;
+            } else {
+                const maskedStr = getMaskedWordString(item);
+                li.innerHTML = `<span>${maskedStr}</span> <span>+${item.word.length * 10} pts</span>`;
             }
-            const maskedStr = maskedArr.join(' ');
-            li.innerHTML = `<span>${maskedStr}</span> <span>+${item.word.length * 10} pts</span>`;
             listEl.appendChild(li);
         });
+    }
+
+    function updateMysteryHint() {
+        let hintText = currentTheme.hint;
+        placedWords.forEach(item => {
+            let replacement = item.found ? item.word : getMaskedWordString(item);
+            let regex = new RegExp(`\\[${item.word}\\]`, 'g');
+            hintText = hintText.replace(regex, `[${replacement}]`);
+        });
+        document.getElementById('mystery-hint').innerHTML = "Indice : " + hintText;
     }
 
     function selectCell(r, c, cellEl) {
@@ -515,9 +530,8 @@
                 score += pw.word.length * 10;
                 document.getElementById('current-score').innerText = score;
                 
-                const wordLi = document.getElementById(`word-item-${idx}`);
-                wordLi.classList.add('found');
-                wordLi.innerHTML = `<span>${pw.word}</span> <span>✓</span>`;
+                renderWordsList();
+                updateMysteryHint();
 
                 pw.coords.forEach(coord => {
                     const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
@@ -535,31 +549,32 @@
         if (inputVal === currentTheme.mystery) {
             score += 100; // Bonus mot mystère
             document.getElementById('current-score').innerText = score;
+            
+            // Révéler tous les mots restants si ce n'est pas déjà fait
+            revealAllRemaining();
             triggerVictory("Bravo ! Vous avez trouvé le mot mystère et tous les mots cachés !");
         } else {
             alert("Ce n'est pas le bon mot mystère. Essayez encore !");
         }
     }
 
-    function giveUpMystery() {
-        // Révéler le mot mystère
-        document.getElementById('mystery-input').value = currentTheme.mystery;
-
-        // Révéler tous les mots restants dans la liste
+    function revealAllRemaining() {
         placedWords.forEach((pw, idx) => {
             if (!pw.found) {
                 pw.found = true;
-                const wordLi = document.getElementById(`word-item-${idx}`);
-                wordLi.classList.add('found');
-                wordLi.innerHTML = `<span>${pw.word}</span> <span>👁️</span>`;
-
                 pw.coords.forEach(coord => {
                     const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
                     if (el) el.classList.add('found');
                 });
             }
         });
+        renderWordsList();
+        updateMysteryHint();
+    }
 
+    function giveUpMystery() {
+        document.getElementById('mystery-input').value = currentTheme.mystery;
+        revealAllRemaining();
         triggerVictory("Dommage ! Le mot mystère était : " + currentTheme.mystery);
     }
 
