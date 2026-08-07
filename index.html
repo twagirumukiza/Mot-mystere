@@ -647,9 +647,10 @@
         
         const randMystery = themeObj.mysteries[Math.floor(Math.random() * themeObj.mysteries.length)];
         
-        let availableWords = themeObj.bank.filter(w => w !== randMystery.word);
-        shuffleArray(availableWords);
-        let selectedWords = availableWords.slice(0, 7);
+        // Extraction automatique de tous les mots présents entre crochets dans la phrase d'indice
+        const matches = randMystery.hint.match(/\[(.*?)\]/g) || [];
+        let hintWords = matches.map(m => m.slice(1, -1));
+        let selectedWords = [...new Set(hintWords)].filter(w => w !== randMystery.word);
 
         currentTheme = {
             words: selectedWords,
