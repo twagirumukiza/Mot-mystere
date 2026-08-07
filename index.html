@@ -349,6 +349,8 @@
                     <input type="text" id="mystery-input" placeholder="Votre réponse..." oninput="saveGameState()" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-color); box-sizing: border-box;">
                     <button class="btn-action" onclick="checkMysteryWord()">Valider le Mot Mystère</button>
                     <button class="btn-action btn-danger" onclick="giveUpMystery()">Donner sa langue au chat</button>
+                    <div id="mystery-feedback" style="font-size: 0.9rem; font-weight: 500; min-height: 20px;"></div>
+                    <div id="wrong-attempts-container"></div>
                 </div>
             </div>
         </div>
@@ -367,7 +369,7 @@
             <p><strong>1. But du jeu :</strong> Trouvez tous les mots cachés dans la grille, y compris le mot mystère, pour marquer un maximum de points.</p>
             <p><strong>2. Sélection des mots :</strong> Cliquez sur les lettres de la grille pour sélectionner les mots (horizontalement, verticalement, de droite à gauche ou de bas en haut).</p>
             <p><strong>3. Indice :</strong> La phrase d'indice se complète automatiquement au fur et à mesure que vous trouvez les mots.</p>
-            <p><strong>4. Score & Victoire :</strong> Chaque mot trouvé rapporte des points. Trouver tous les mots et le mot mystère conclut la partie !</p>
+            <p><strong>4. Score & Victoire :</strong> Chaque mot trouvé rapporte des points. Trouver tous les mots et deviner le mot mystère conclut la partie !</p>
             <button class="btn-action" onclick="closeRules()">Compris !</button>
         </div>
     </div>
@@ -500,6 +502,7 @@
     let targetScore = 0;
     let selectedCells = [];
     let isGameFinished = false;
+    let wrongMysteryAttempts = [];
     const gridSize = 10;
 
     const themeGridEl = document.getElementById('theme-grid');
@@ -545,6 +548,7 @@
             score,
             targetScore,
             mysteryInputVal: document.getElementById('mystery-input').value,
+            wrongMysteryAttempts,
             isGameFinished
         };
         localStorage.setItem('mots_mysteres_game', JSON.stringify(gameState));
@@ -570,6 +574,7 @@
         foundWordsCount = savedGame.foundWordsCount;
         score = savedGame.score;
         targetScore = savedGame.targetScore;
+        wrongMysteryAttempts = savedGame.wrongMysteryAttempts || [];
         isGameFinished = savedGame.isGameFinished;
 
         document.getElementById('current-theme-name').innerText = themeObj.name;
@@ -582,6 +587,7 @@
         renderRestoredGrid();
         renderWordsList();
         updateMysteryHint();
+        renderWrongAttempts();
 
         if (isGameFinished) {
             document.getElementById('victory-box').classList.remove('hidden');
@@ -660,11 +666,14 @@
         };
 
         isGameFinished = false;
+        wrongMysteryAttempts = [];
         document.getElementById('current-theme-name').innerText = themeObj.name;
         document.getElementById('menu-screen').classList.add('hidden');
         document.getElementById('game-screen').classList.remove('hidden');
         document.getElementById('victory-box').classList.add('hidden');
         document.getElementById('mystery-input').value = "";
+        document.getElementById('mystery-feedback').innerText = "";
+        document.getElementById('wrong-attempts-container').innerHTML = "";
         
         score = 0;
         foundWordsCount = 0;
@@ -844,11 +853,6 @@
                     pw.found = true;
                     foundWordsCount++;
                     score += pw.word.length * 10;
-                    
-                    if (pw.isMystery) {
-                        document.getElementById('mystery-input').value = pw.word;
-                        score += 100;
-                    }
 
                     document.getElementById('current-score').innerText = score;
                     foundMatched = true;
@@ -862,7 +866,7 @@
                     });
 
                     if (placedWords.every(w => w.found)) {
-                        triggerVictory("Félicitations ! Vous avez trouvé tous les mots et le mot mystère dans la grille !");
+                        triggerVictory("Félicitations ! Vous avez trouvé tous les mots et le mot mystère !");
                     }
                 }
             }
@@ -885,24 +889,50 @@
     function checkMysteryWord() {
         if (isGameFinished) return;
         const inputVal = document.getElementById('mystery-input').value.trim().toUpperCase();
+        const feedbackEl = document.getElementById('mystery-feedback');
+        
+        if (!inputVal) return;
+
         if (inputVal === currentTheme.mystery) {
+            feedbackEl.style.color = 'var(--accent)';
+            feedbackEl.innerText = "🎉 Bravo ! C'est le bon mot mystère !";
+            
             const mysteryObj = placedWords.find(w => w.isMystery);
             if (mysteryObj && !mysteryObj.found) {
                 mysteryObj.found = true;
-                score += 100;
+                score += mysteryObj.word.length * 10;
                 mysteryObj.coords.forEach(coord => {
                     const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
                     if (el) el.classList.add('found');
                 });
             }
-            score += 50;
+            score += 100;
             document.getElementById('current-score').innerText = score;
             revealAllRemaining();
-            triggerVictory("Bravo ! Vous avez trouvé le mot mystère !");
+            triggerVictory("Félicitations ! Vous avez trouvé tous les mots et le mot mystère !");
         } else {
-            alert("Ce n'est pas le bon mot mystère. Essayez encore !");
+            if (!wrongMysteryAttempts.includes(inputVal)) {
+                wrongMysteryAttempts.push(inputVal);
+            }
+            feedbackEl.style.color = 'var(--danger)';
+            feedbackEl.innerText = "Ce n'est pas le bon mot. Continuez vos recherches !";
+            renderWrongAttempts();
         }
         saveGameState();
+    }
+
+    function renderWrongAttempts() {
+        const container = document.getElementById('wrong-attempts-container');
+        if (!container) return;
+        if (wrongMysteryAttempts.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
+        let html = `<div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px; padding: 8px; background: var(--bg-color); border: 1px solid var(--border); border-radius: 6px;">`;
+        html += `<strong style="color: var(--danger);">Tentatives incorrectes (${wrongMysteryAttempts.length}) :</strong> `;
+        html += wrongMysteryAttempts.join(', ');
+        html += `</div>`;
+        container.innerHTML = html;
     }
 
     function revealAllRemaining() {
