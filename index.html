@@ -948,7 +948,9 @@
 
     function giveUpMystery() {
         if (isGameFinished) return;
+        // Remplit le champ input avec le mot mystère et déclenche la validation complète
         document.getElementById('mystery-input').value = currentTheme.mystery;
+        checkMysteryWord();
     }
 
     function triggerVictory(msg) {
