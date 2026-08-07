@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Mots Mystères</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #22c55e;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --border: #334155;
+            --cell-bg: #334155;
+            --cell-hover: #475569;
+            --font-scale: 1rem;
+        }
+
+        body.light-theme {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --border: #cbd5e1;
+            --cell-bg: #e2e8f0;
+            --cell-hover: #cbd5e1;
+        }
+
+        body.font-small { --font-scale: 0.85rem; }
+        body.font-medium { --font-scale: 1rem; }
+        body.font-large { --font-scale: 1.15rem; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: var(--font-scale);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border: 1px solid var(--border);
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .theme-btn {
+            background-color: var(--cell-bg);
+            color: var(--text-color);
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .theme-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-box {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .stat-value {
+            color: var(--accent);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .game-layout {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(10, 38px);
+            grid-template-rows: repeat(10, 38px);
+            gap: 4px;
+            background: var(--bg-color);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            user-select: none;
+        }
+
+        .grid-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--cell-bg);
+            color: var(--text-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .grid-cell:hover {
+            background-color: var(--cell-hover);
+        }
+
+        .grid-cell.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .grid-cell.found {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .sidebar {
+            flex: 1;
+            min-width: 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .words-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .word-item {
+            background: var(--bg-color);
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border);
+            letter-spacing: 2px;
+            font-family: monospace;
+        }
+
+        .word-item.found {
+            text-decoration: line-through;
+            color: var(--text-muted);
+            border-color: var(--accent);
+            background: rgba(34, 197, 94, 0.1);
+            letter-spacing: normal;
+            font-family: inherit;
+        }
+
+        .word-item.mystery-word-item {
+            border-color: #818cf8;
+            background: rgba(129, 140, 248, 0.1);
+        }
+
+        .btn-action {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn-action:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--cell-bg);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--cell-hover);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .victory-message {
+            text-align: center;
+            padding: 20px;
+            background: rgba(34, 197, 94, 0.2);
+            border: 2px dashed var(--accent);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 12px;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            color: var(--text-color);
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: #818cf8;
+        }
+
+        .modal-content p, .modal-content label {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        footer {
+            margin-top: 30px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Les Mots Mystères</h1>
+    <p class="subtitle">Trouvez les mots cachés dans la grille, y compris le mot mystère !</p>
+
+    <div class="container" id="menu-screen">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+            <h2 style="margin: 0;">Choisissez un thème :</h2>
+            <div style="display: flex; gap: 8px;">
+                <button class="btn-action btn-secondary" style="width: auto; padding: 8px 14px;" onclick="openSettings()">Paramètres</button>
+                <button class="btn-action btn-secondary" style="width: auto; padding: 8px 14px;" onclick="openRules()">Règles</button>
+            </div>
+        </div>
+        <div class="theme-grid" id="theme-grid"></div>
+    </div>
+
+    <div class="container hidden" id="game-screen">
+        <div class="game-header">
+            <div class="stat-box">Thème : <span id="current-theme-name" class="stat-value"></span></div>
+            <div class="stat-box">Score : <span id="current-score" class="stat-value">0</span> / <span id="target-score">0</span> pts</div>
+            <div class="header-actions">
+                <button class="btn-action btn-secondary" style="width: auto; padding: 6px 12px;" onclick="returnToMenu()">Thèmes</button>
+                <button class="btn-action btn-secondary" style="width: auto; padding: 6px 12px;" onclick="resetCurrentGame()">Réinitialiser</button>
+                <button class="btn-action btn-secondary" style="width: auto; padding: 6px 12px;" onclick="openSettings()">Paramètres</button>
+                <button class="btn-action btn-secondary" style="width: auto; padding: 6px 12px;" onclick="openRules()">Règles</button>
+            </div>
+        </div>
+
+        <div class="game-layout">
+            <div class="grid-container" id="grid-container"></div>
+            <div class="sidebar">
+                <h3>Mots à trouver :</h3>
+                <ul class="words-list" id="words-list"></ul>
+                
+                <div id="mystery-container" style="margin-top:auto; display:flex; flex-direction:column; gap:8px;">
+                    <h4>Mot Mystère :</h4>
+                    <p id="mystery-hint" style="color: var(--text-muted); font-size: 0.85rem; margin-top:0; line-height: 1.4;">Indice : ...</p>
+                    <input type="text" id="mystery-input" placeholder="Votre réponse..." oninput="saveGameState()" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-color); box-sizing: border-box;">
+                    <button class="btn-action" onclick="checkMysteryWord()">Valider le Mot Mystère</button>
+                    <button class="btn-action btn-danger" onclick="giveUpMystery()">Donner sa langue au chat</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="victory-box" class="victory-message hidden">
+            <h2>🎉 Partie Terminée ! 🎉</h2>
+            <p id="victory-text" style="margin-bottom: 15px;"></p>
+            <button class="btn-action" style="max-width: 200px; margin: 0 auto;" onclick="resetCurrentGame()">Rejouer ce thème</button>
+        </div>
+    </div>
+
+    <!-- Modale des Règles -->
+    <div id="rules-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Règles du jeu</h3>
+            <p><strong>1. But du jeu :</strong> Trouvez tous les mots cachés dans la grille, y compris le mot mystère, pour marquer un maximum de points.</p>
+            <p><strong>2. Sélection des mots :</strong> Cliquez sur les lettres de la grille pour sélectionner les mots dans l'ordre de votre choix sur une ligne valide.</p>
+            <p><strong>3. Indice :</strong> La phrase d'indice se complète automatiquement au fur et à mesure que vous trouvez les mots.</p>
+            <p><strong>4. Score & Victoire :</strong> Chaque mot trouvé rapporte des points. Trouver tous les mots et le mot mystère conclut la partie !</p>
+            <button class="btn-action" onclick="closeRules()">Compris !</button>
+        </div>
+    </div>
+
+    <!-- Modale des Paramètres -->
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Paramètres</h3>
+            <div>
+                <label style="display: block; margin-bottom: 8px; font-weight: bold;">Fond d'écran :</label>
+                <div style="display: flex; gap: 10px;">
+                    <button id="btn-theme-dark" class="btn-action" style="flex: 1;" onclick="setThemeMode('dark')">Sombre</button>
+                    <button id="btn-theme-light" class="btn-action btn-secondary" style="flex: 1;" onclick="setThemeMode('light')">Clair</button>
+                </div>
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 8px; font-weight: bold;" for="font-size-select">Taille de la police :</label>
+                <select id="font-size-select" onchange="setFontSize(this.value)" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-color); box-sizing: border-box;">
+                    <option value="small">Petite</option>
+                    <option value="medium" selected>Moyenne</option>
+                    <option value="large">Grande</option>
+                </select>
+            </div>
+            <button class="btn-action" style="margin-top: 10px;" onclick="closeSettings()">Enregistrer & Fermer</button>
+        </div>
+    </div>
+
+    <footer>by twagirumukiza</footer>
+
+<script>
+    const themesData = {
+        cuisine: { 
+            name: "Cuisine", 
+            bank: ["FOUR", "CHEF", "PLAT", "MENU", "SEL", "POIVRE", "SAUCE", "POELE", "LOURD", "GATEAU", "CREME", "SUCRE", "FARINE", "OEUF", "FOURNEAU", "SOUPE", "BOWL", "FEU", "AIL", "POIREAU", "EAU", "LOUCHE", "TARTINE", "BEURRE", "FRITE", "SALADE"],
+            mysteries: [
+                { word: "RECETTE", hint: "Le [CHEF] prépare un délicieux [PLAT] sur une [POELE] bien chaude avec une pincée de [SEL] et de [POIVRE], rédige un [MENU] appétissant, puis utilise le [FOUR] et une [SAUCE] onctueuse pour réussir sa parfaite [RECETTE]." },
+                { word: "PATISSERIE", hint: "Pour réussir une exquise [PATISSERIE], le pâtissier mélange de la [FARINE], du [SUCRE], un [OEUF] et de la [CREME] fraîche, avant de cuire le tout dans le [FOUR] de son [FOURNEAU]." },
+                { word: "BOUILLON", hint: "Pour concocter un bon [BOUILLON], on porte de l'[EAU] à ébullition sur le [FEU], on y ajoute de l'[AIL], du [POIREAU] et du [SEL], puis on remue le tout à l'aide d'une [LOUCHE]." }
+            ]
+        },
+        animaux: { 
+            name: "Animaux", 
+            bank: ["LION", "TIGRE", "LOUP", "OURS", "ZEBRE", "SINGE", "PANTHERE", "GIRAFE", "CHIEN", "CHAT", "LAPIN", "POISSON", "OISEAU", "HAMSTER", "SOURIS", "TORTUE", "AIGLE", "FAUCON", "HIBOU", "BUSE", "MERLE", "MESANGE", "CORBEAU", "CIGOGNE", "RENARD", "CERF"],
+            mysteries: [
+                { word: "SAUVAGE", hint: "Dans la grande réserve naturelle, le [LION], le [TIGRE], le [LOUP], l'[OURS], le [ZEBRE], le [SINGE], la [PANTHERE] et la [GIRAFE] vivent tous à l'état [SAUVAGE]." },
+                { word: "DOMESTIQUE", hint: "Chaque animal de compagnie comme le [CHIEN], le [CHAT], le [LAPIN], le [POISSON] rouge, l'[OISEAU], le [HAMSTER], la [SOURIS] ou la [TORTUE] mène un quotidien [DOMESTIQUE]." },
+                { word: "VOLAGE", hint: "Dans le ciel azuré, l'[AIGLE], le [FAUCON], l'agile [HIBOU], la [BUSE], le [MERLE], la [MESANGE], le [CORBEAU] et la [CIGOGNE] forment un groupe d'oiseaux très [VOLAGE]." }
+            ]
+        },
+        histoire: { 
+            name: "Histoire", 
+            bank: ["ROI", "PAIX", "ARME", "SIEGE", "DATE", "FORT", "TRONE", "EPEE", "GAUL", "CLOVIS", "REIMS", "BATAILLE", "PEUPLE", "UNITE", "COURONNE", "SCEAU", "BLASON", "TOUR"],
+            mysteries: [
+                { word: "EMPIRE", hint: "Après qu'un grand [ROI] a brandi son [ARME] et mené un long [SIEGE] autour d'un [FORT], la [PAIX] est enfin proclamée à une [DATE] historique pour fonder un nouvel [EMPIRE]." },
+                { word: "ROYAUME", hint: "Sous l'impulsion du souverain [CLOVIS] victorieux lors d'une [BATAILLE] décisive, le [PEUPLE] gaulois trouve son [UNITE] sacrée à [REIMS] pour bâtir un nouveau [ROYAUME]." }
+            ]
+        },
+        litterature: { 
+            name: "Littérature", 
+            bank: ["LIVRE", "PAGE", "PROSE", "RECIT", "TOME", "AUTEUR", "MOT", "PLUME", "POETE", "VERS", "RHYME", "STROPHE", "ENCRE", "LIRIQUE", "TEXTE", "CONTE", "NOUVELLE"],
+            mysteries: [
+                { word: "ROMAN", hint: "Dans ce [LIVRE] passionnant, chaque [PAGE] de [PROSE], chaque [RECIT] et chaque [TOME] rédigé par l'[AUTEUR] avec sa [PLUME] choisit le [MOT] juste pour bâtir un grand [ROMAN]." },
+                { word: "POESIE", hint: "Inspiré par la muse, le [POETE] trempe sa [PLUME] dans l'[ENCRE] pour composer un [VERS], structurer chaque [STROPHE] de son [TEXTE] et exprimer tout son art de la [POESIE]." }
+            ]
+        },
+        theatre: { 
+            name: "Théâtre", 
+            bank: ["SCENE", "ACTEUR", "ROLE", "TEXTE", "DECOR", "SALLE", "DRAME", "ARTISTE", "COMEDIE", "RIRE", "MASQUE", "SALVE", "JOIE", "TROUPE", "PLANCHE", "THEATRE"],
+            mysteries: [
+                { word: "RIDEAU", hint: "Sur la grande [SCENE], l'[ACTEUR] et l'[ARTISTE] incarnent leur [ROLE] avec un [TEXTE] percutant, devant un [DECOR] somptueux sous les applaudissements d'une [SALLE] avant que ne tombe le [RIDEAU]." },
+                { word: "SUCCES", hint: "Portée par une [TROUPE] dynamique sur les [PLANCHE]s de la [SCENE], cette [COMEDIE] hilarante déclenche le [RIRE] général derrière son [MASQUE] avant d'obtenir un franc [SUCCES]." }
+            ]
+        },
+        danse: { 
+            name: "Danse", 
+            bank: ["BAL", "PAS", "TANGO", "VALSE", "SALSA", "CORPS", "RYTHME", "DANSE", "GESTES", "CLUB", "PISTE", "SHOW", "MOUVEMENT", "RYTHME"],
+            mysteries: [
+                { word: "BALLET", hint: "Pour préparer le grand [BAL], chaque [PAS] précis de [TANGO], de [VALSE] ou de [SALSA] exécuté par la [DANSE] demande au [CORPS] de suivre le parfait [BALLET]." },
+                { word: "CADENCE", hint: "Sur la [PISTE] illuminée du [CLUB], chaque [DANSE] enflammée et chaque [GESTES] en harmonie avec le [RYTHME] entraînent les danseurs dans une folle [CADENCE]." }
+            ]
+        },
+        sport: { 
+            name: "Sport", 
+            bank: ["BALLON", "COURIR", "MATCH", "SCORE", "EQUIPE", "JEU", "CHAMP", "PISTE", "COURSE", "LIGNE", "CHRONO", "EFFORT", "PODIUM", "MEDAILLE", "SPORT"],
+            mysteries: [
+                { word: "VICTOIRE", hint: "Durant ce [MATCH] intense sur le [CHAMP] de course, l'[EQUIPE] doit [COURIR] et manier le [BALLON] avec brio pour améliorer le [SCORE], remporter le [JEU] et décrocher la belle [VICTOIRE]." },
+                { word: "CHAMPION", hint: "Après un rude [EFFORT] sur la [PISTE] le long de la [LIGNE] droite, le chronomètre valide la performance de l'athlète qui monte sur le [PODIUM] pour brandir sa [MEDAILLE] en digne [CHAMPION]." }
+            ]
+        },
+        football: { 
+            name: "Football", 
+            bank: ["BUT", "STADE", "ARBITRE", "TACLE", "MATCH", "JOUEUR", "FAUTE", "BALLON", "MAILLOT", "PASS", "TIR", "GARDIEN", "LIGNE", "COACH", "CLUB"],
+            mysteries: [
+                { word: "TROPHEE", hint: "Sur la pelouse pleine du [STADE], l'[ARBITRE] siffle immédiatement la [FAUTE], tandis que le [JOUEUR] évite habilement le [TACLE] pour propulser le [BALLON] au fond du [BUT] lors de ce [MATCH] décisif pour le [TROPHEE]." },
+                { word: "VICTOIRE", hint: "Sous l'œil attentif du [COACH], l'[EQUIPE] vêtue de son [MAILLOT] enchaîne les [PASS] et un [TIR] puissant que le [GARDIEN] repousse sur sa [LIGNE] pour offrir au [CLUB] une éclatante [VICTOIRE]." }
+            ]
+        },
+        informatique: { 
+            name: "Informatique", 
+            bank: ["CODE", "BUG", "LIGNE", "DATA", "RESEAU", "WEB", "CLIC", "ECRAN", "CLAVIER", "SOURIS", "PROG", "INDEX", "CLOUD", "SERVEUR", "SITE", "LIEN", "HACK"],
+            mysteries: [
+                { word: "LOGICIEL", hint: "En écrivant ce [CODE] informatique, le développeur analyse chaque [DATA] circulant sur le [RESEAU], corrige un [BUG] [LIGNE] après [LIGNE] sur son [ECRAN] d'un simple [CLIC] pour faire tourner le parfait [LOGICIEL]." },
+                { word: "INTERNET", hint: "Grâce à son [CLAVIER], sa [SOURIS] et un bon [LIEN] hébergé sur un [SERVEUR] distant dans le [CLOUD], l'expert met en ligne son [SITE] à destination de tout le réseau [INTERNET]." }
+            ]
+        },
+        musique: { 
+            name: "Musique", 
+            bank: ["NOTE", "RYTHME", "BASS", "VOIX", "CD", "SON", "OPERA", "PIANO", "GUITARE", "CORDE", "ACCORD", "CHANT", "SCENE", "MICRO", "ROCK", "SALLE"],
+            mysteries: [
+                { word: "MELODIE", hint: "Une simple [NOTE] jouée au [PIANO] et un bon [RYTHME] de [BASS], portés par la [VOIX] cristalline ou un beau [SON] d'[OPERA] enregistré sur un [CD], composent une magnifique [MELODIE]." },
+                { word: "CONCERT", hint: "Armé de sa [GUITARE] dont il pince chaque [CORDE] pour obtenir un bel [ACCORD], l'artiste s'avance vers le [MICRO] sur la [SCENE] de la [SALLE] pour entamer son grand [CONCERT]." }
+            ]
+        },
+        cinema: { 
+            name: "Cinéma", 
+            bank: ["FILM", "PLAN", "ACTEUR", "SCENE", "CADRE", "SALLE", "STAR", "BOITE", "DECOR", "DIRECTEUR", "GENRE", "ACTION", "COUP", "ECRAN", "BILLET"],
+            mysteries: [
+                { word: "CAMERA", hint: "Pour tourner ce magnifique [FILM], chaque [PLAN] et chaque [SCENE] demandent à l'[ACTEUR] principal et à la [STAR] de poser dans le bon [CADRE] devant l'objectif de la précieuse [CAMERA]." },
+                { word: "SCENARIO", hint: "Sous la direction du réalisateur qui crie l'[ACTION] après le [COUP] d'envoi, le tournage progresse plan par plan sous les yeux du public pour découvrir un nouveau [SCENARIO]." }
+            ]
+        }
+    };
+
+    let currentThemeKey = null;
+    let currentTheme = null;
+    let gridData = [];
+    let placedWords = [];
+    let foundWordsCount = 0;
+    let score = 0;
+    let targetScore = 0;
+    let selectedCells = [];
+    let isGameFinished = false;
+    const gridSize = 10;
+
+    const themeGridEl = document.getElementById('theme-grid');
+    for (let key in themesData) {
+        const btn = document.createElement('button');
+        btn.className = 'theme-btn';
+        btn.innerText = themesData[key].name;
+        btn.onclick = () => startGame(key);
+        themeGridEl.appendChild(btn);
+    }
+
+    window.onload = function() {
+        const savedSettings = JSON.parse(localStorage.getItem('mots_mysteres_settings'));
+        if (savedSettings) {
+            setThemeMode(savedSettings.themeMode || 'dark');
+            setFontSize(savedSettings.fontSize || 'medium');
+            document.getElementById('font-size-select').value = savedSettings.fontSize || 'medium';
+        }
+
+        const savedGame = JSON.parse(localStorage.getItem('mots_mysteres_game'));
+        if (savedGame && savedGame.currentThemeKey) {
+            restoreGame(savedGame);
+        }
+    };
+
+    function saveSettings() {
+        const isLight = document.body.classList.contains('light-theme');
+        const fontSizeSelect = document.getElementById('font-size-select').value;
+        localStorage.setItem('mots_mysteres_settings', JSON.stringify({
+            themeMode: isLight ? 'light' : 'dark',
+            fontSize: fontSizeSelect
+        }));
+    }
+
+    function saveGameState() {
+        if (!currentThemeKey) return;
+        const gameState = {
+            currentThemeKey,
+            currentThemeMystery: currentTheme.mystery,
+            gridData,
+            placedWords,
+            foundWordsCount,
+            score,
+            targetScore,
+            mysteryInputVal: document.getElementById('mystery-input').value,
+            isGameFinished
+        };
+        localStorage.setItem('mots_mysteres_game', JSON.stringify(gameState));
+    }
+
+    function restoreGame(savedGame) {
+        currentThemeKey = savedGame.currentThemeKey;
+        const themeObj = themesData[currentThemeKey];
+        
+        const mysteryObj = themeObj.mysteries.find(m => m.word === savedGame.currentThemeMystery) || themeObj.mysteries[0];
+        currentTheme = {
+            words: savedGame.placedWords.filter(w => !w.isMystery).map(w => w.word),
+            mystery: mysteryObj.word,
+            hint: mysteryObj.hint
+        };
+        
+        gridData = savedGame.gridData;
+        placedWords = savedGame.placedWords;
+        foundWordsCount = savedGame.foundWordsCount;
+        score = savedGame.score;
+        targetScore = savedGame.targetScore;
+        isGameFinished = savedGame.isGameFinished;
+
+        document.getElementById('current-theme-name').innerText = themeObj.name;
+        document.getElementById('menu-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        document.getElementById('mystery-input').value = savedGame.mysteryInputVal || '';
+        document.getElementById('current-score').innerText = score;
+        document.getElementById('target-score').innerText = targetScore;
+
+        renderRestoredGrid();
+        renderWordsList();
+        updateMysteryHint();
+
+        if (isGameFinished) {
+            document.getElementById('victory-box').classList.remove('hidden');
+        } else {
+            document.getElementById('victory-box').classList.add('hidden');
+        }
+    }
+
+    function openRules() {
+        document.getElementById('rules-modal').classList.remove('hidden');
+    }
+
+    function closeRules() {
+        document.getElementById('rules-modal').classList.add('hidden');
+    }
+
+    function openSettings() {
+        document.getElementById('settings-modal').classList.remove('hidden');
+    }
+
+    function closeSettings() {
+        document.getElementById('settings-modal').classList.add('hidden');
+        saveSettings();
+    }
+
+    function setThemeMode(mode) {
+        const btnDark = document.getElementById('btn-theme-dark');
+        const btnLight = document.getElementById('btn-theme-light');
+        if (mode === 'light') {
+            document.body.classList.add('light-theme');
+            btnLight.className = 'btn-action';
+            btnDark.className = 'btn-action btn-secondary';
+        } else {
+            document.body.classList.remove('light-theme');
+            btnDark.className = 'btn-action';
+            btnLight.className = 'btn-action btn-secondary';
+        }
+        saveSettings();
+    }
+
+    function setFontSize(size) {
+        document.body.classList.remove('font-small', 'font-medium', 'font-large');
+        if (size === 'small') document.body.classList.add('font-small');
+        else if (size === 'large') document.body.classList.add('font-large');
+        else document.body.classList.add('font-medium');
+        saveSettings();
+    }
+
+    function returnToMenu() {
+        localStorage.removeItem('mots_mysteres_game');
+        currentThemeKey = null;
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('menu-screen').classList.remove('hidden');
+        document.getElementById('victory-box').classList.add('hidden');
+    }
+
+    function resetCurrentGame() {
+        if (currentThemeKey) {
+            startGame(currentThemeKey);
+        }
+    }
+
+    function startGame(themeKey) {
+        currentThemeKey = themeKey;
+        const themeObj = themesData[themeKey];
+        
+        const randMystery = themeObj.mysteries[Math.floor(Math.random() * themeObj.mysteries.length)];
+        
+        let availableWords = themeObj.bank.filter(w => w !== randMystery.word);
+        shuffleArray(availableWords);
+        let selectedWords = availableWords.slice(0, 7);
+
+        currentTheme = {
+            words: selectedWords,
+            mystery: randMystery.word,
+            hint: randMystery.hint
+        };
+
+        isGameFinished = false;
+        document.getElementById('current-theme-name').innerText = themeObj.name;
+        document.getElementById('menu-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        document.getElementById('victory-box').classList.add('hidden');
+        document.getElementById('mystery-input').value = "";
+        
+        score = 0;
+        foundWordsCount = 0;
+        document.getElementById('current-score').innerText = score;
+
+        generateGrid();
+        renderWordsList();
+        updateMysteryHint();
+        calculateTargetScore();
+        saveGameState();
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function calculateTargetScore() {
+        const allWords = [...currentTheme.words, currentTheme.mystery];
+        targetScore = allWords.reduce((acc, word) => acc + (word.length * 10), 0) + 100;
+        document.getElementById('target-score').innerText = targetScore;
+    }
+
+    function generateGrid() {
+        const container = document.getElementById('grid-container');
+        container.innerHTML = '';
+        gridData = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
+        
+        placedWords = [];
+        let directions = [
+            {r: 0, c: 1},  
+            {r: 1, c: 0},  
+            {r: 0, c: -1}, 
+            {r: -1, c: 0}  
+        ];
+
+        const wordsToPlace = [...currentTheme.words, currentTheme.mystery];
+
+        wordsToPlace.forEach(word => {
+            let placed = false;
+            let attempts = 0;
+            const isMysteryWord = (word === currentTheme.mystery);
+
+            while (!placed && attempts < 200) {
+                attempts++;
+                let dir = directions[Math.floor(Math.random() * directions.length)];
+                
+                let startR = Math.floor(Math.random() * gridSize);
+                let startC = Math.floor(Math.random() * gridSize);
+                
+                let endR = startR + (dir.r * (word.length - 1));
+                let endC = startC + (dir.c * (word.length - 1));
+
+                if (endR < 0 || endR >= gridSize || endC < 0 || endC >= gridSize) continue;
+
+                let canPlace = true;
+                let coords = [];
+                for (let i = 0; i < word.length; i++) {
+                    let cr = startR + (dir.r * i);
+                    let cc = startC + (dir.c * i);
+                    if (gridData[cr][cc] !== '' && gridData[cr][cc] !== word[i]) {
+                        canPlace = false;
+                        break;
+                    }
+                    coords.push({r: cr, c: cc});
+                }
+
+                if (canPlace) {
+                    for (let i = 0; i < word.length; i++) {
+                        gridData[coords[i].r][coords[i].c] = word[i];
+                    }
+
+                    let hintCount = word.length <= 5 ? 1 : (word.length <= 10 ? 2 : 3);
+                    let hintIndices = [];
+                    while(hintIndices.length < hintCount && hintIndices.length < word.length) {
+                        let randIdx = Math.floor(Math.random() * word.length);
+                        if(!hintIndices.includes(randIdx)) {
+                            hintIndices.push(randIdx);
+                        }
+                    }
+
+                    placedWords.push({word, coords, found: false, hintIndices, isMystery: isMysteryWord});
+                    placed = true;
+                }
+            }
+        });
+
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        for (let r = 0; r < gridSize; r++) {
+            for (let c = 0; c < gridSize; c++) {
+                if (gridData[r][c] === '') {
+                    gridData[r][c] = alphabet[Math.floor(Math.random() * alphabet.length)];
+                }
+            }
+        }
+        renderRestoredGrid();
+    }
+
+    function renderRestoredGrid() {
+        const container = document.getElementById('grid-container');
+        container.innerHTML = '';
+        for (let r = 0; r < gridSize; r++) {
+            for (let c = 0; c < gridSize; c++) {
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell';
+                cell.dataset.r = r;
+                cell.dataset.c = c;
+                cell.innerText = gridData[r][c];
+
+                let isFound = placedWords.some(pw => pw.found && pw.coords.some(coord => coord.r === r && coord.c === c));
+                if (isFound) {
+                    cell.classList.add('found');
+                }
+
+                cell.onmousedown = () => selectCell(r, c, cell);
+                container.appendChild(cell);
+            }
+        }
+    }
+
+    function getMaskedWordString(item) {
+        let maskedArr = [];
+        for(let i=0; i<item.word.length; i++) {
+            if(item.hintIndices.includes(i) || item.isMystery) {
+                maskedArr.push(item.word[i]);
+            } else {
+                maskedArr.push('_');
+            }
+        }
+        return maskedArr.join(' ');
+    }
+
+    function renderWordsList() {
+        const listEl = document.getElementById('words-list');
+        listEl.innerHTML = '';
+        placedWords.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.className = 'word-item';
+            if (item.isMystery) {
+                li.classList.add('mystery-word-item');
+            }
+            li.id = `word-item-${index}`;
+            
+            if (item.found) {
+                li.classList.add('found');
+                li.innerHTML = `<span>${item.isMystery ? '⭐ ' : ''}${item.word}</span> <span>✓</span>`;
+            } else {
+                const maskedStr = getMaskedWordString(item);
+                li.innerHTML = `<span>${item.isMystery ? '⭐ ' : ''}${maskedStr}</span> <span>+${item.word.length * 10} pts</span>`;
+            }
+            listEl.appendChild(li);
+        });
+    }
+
+    function updateMysteryHint() {
+        let hintText = currentTheme.hint;
+        placedWords.forEach(item => {
+            let replacement = item.found ? item.word : getMaskedWordString(item);
+            let regex = new RegExp(`\\[${item.word}\\]`, 'g');
+            hintText = hintText.replace(regex, `[${replacement}]`);
+        });
+        document.getElementById('mystery-hint').innerHTML = "Indice : " + hintText;
+    }
+
+    function selectCell(r, c, cellEl) {
+        if (isGameFinished) return;
+        cellEl.classList.toggle('selected');
+        const index = selectedCells.findIndex(item => item.r === r && item.c === c);
+        if (index > -1) {
+            selectedCells.splice(index, 1);
+        } else {
+            selectedCells.push({r, c});
+        }
+
+        let foundMatched = false;
+        placedWords.forEach(pw => {
+            if (!pw.found && selectedCells.length === pw.coords.length) {
+                const allMatch = pw.coords.every(coord => 
+                    selectedCells.some(sc => sc.r === coord.r && sc.c === coord.c)
+                );
+                if (allMatch) {
+                    pw.found = true;
+                    foundWordsCount++;
+                    score += pw.word.length * 10;
+                    
+                    if (pw.isMystery) {
+                        document.getElementById('mystery-input').value = pw.word;
+                        score += 100;
+                    }
+
+                    document.getElementById('current-score').innerText = score;
+                    foundMatched = true;
+
+                    pw.coords.forEach(coord => {
+                        const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
+                        if (el) {
+                            el.classList.remove('selected');
+                            el.classList.add('found');
+                        }
+                    });
+
+                    if (placedWords.every(w => w.found)) {
+                        triggerVictory("Félicitations ! Vous avez trouvé tous les mots et le mot mystère dans la grille !");
+                    }
+                }
+            }
+        });
+
+        if (foundMatched) {
+            selectedCells = [];
+            document.querySelectorAll('.grid-cell.selected').forEach(el => {
+                if (!el.classList.contains('found')) {
+                    el.classList.remove('selected');
+                }
+            });
+            
+            renderWordsList();
+            updateMysteryHint();
+        }
+        saveGameState();
+    }
+
+    function checkMysteryWord() {
+        if (isGameFinished) return;
+        const inputVal = document.getElementById('mystery-input').value.trim().toUpperCase();
+        if (inputVal === currentTheme.mystery) {
+            const mysteryObj = placedWords.find(w => w.isMystery);
+            if (mysteryObj && !mysteryObj.found) {
+                mysteryObj.found = true;
+                score += 100;
+                mysteryObj.coords.forEach(coord => {
+                    const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
+                    if (el) el.classList.add('found');
+                });
+            }
+            score += 50;
+            document.getElementById('current-score').innerText = score;
+            revealAllRemaining();
+            triggerVictory("Bravo ! Vous avez trouvé le mot mystère !");
+        } else {
+            alert("Ce n'est pas le bon mot mystère. Essayez encore !");
+        }
+        saveGameState();
+    }
+
+    function revealAllRemaining() {
+        placedWords.forEach((pw) => {
+            if (!pw.found) {
+                pw.found = true;
+                pw.coords.forEach(coord => {
+                    const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
+                    if (el) el.classList.add('found');
+                });
+            }
+        });
+        renderWordsList();
+        updateMysteryHint();
+    }
+
+    function giveUpMystery() {
+        if (isGameFinished) return;
+        document.getElementById('mystery-input').value = currentTheme.mystery;
+    }
+</script>
+
+</body>
+</html>
