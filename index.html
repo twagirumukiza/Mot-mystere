@@ -366,7 +366,7 @@
         <div class="modal-content">
             <h3>Règles du jeu</h3>
             <p><strong>1. But du jeu :</strong> Trouvez tous les mots cachés dans la grille, y compris le mot mystère, pour marquer un maximum de points.</p>
-            <p><strong>2. Sélection des mots :</strong> Cliquez sur les lettres de la grille pour sélectionner les mots dans l'ordre de votre choix sur une ligne valide.</p>
+            <p><strong>2. Sélection des mots :</strong> Cliquez sur les lettres de la grille pour sélectionner les mots (horizontalement, verticalement, de droite à gauche ou de bas en haut).</p>
             <p><strong>3. Indice :</strong> La phrase d'indice se complète automatiquement au fur et à mesure que vous trouvez les mots.</p>
             <p><strong>4. Score & Victoire :</strong> Chaque mot trouvé rapporte des points. Trouver tous les mots et le mot mystère conclut la partie !</p>
             <button class="btn-action" onclick="closeRules()">Compris !</button>
@@ -402,7 +402,7 @@
     const themesData = {
         cuisine: { 
             name: "Cuisine", 
-            bank: ["FOUR", "CHEF", "PLAT", "MENU", "SEL", "POIVRE", "SAUCE", "POELE", "LOURD", "GATEAU", "CREME", "SUCRE", "FARINE", "OEUF", "FOURNEAU", "SOUPE", "BOWL", "FEU", "AIL", "POIREAU", "EAU", "LOUCHE", "TARTINE", "BEURRE", "FRITE", "SALADE"],
+            bank: ["FOUR", "CHEF", "PLAT", "MENU", "SEL", "POIVRE", "SAUCE", "POELE", "LOURD", "GATEAU", "CREME", "SUCRE", "FARINE", "OEUF", "FOURNEAU", "SOUPE", "BOWL", "FEU", "AIL", "POIREAU", "EAU", "LOUCHE", "TARTINE", "BEURRE", "FRITE", "SALADE", "EPICE", "MIJOTER", "GOUT"],
             mysteries: [
                 { word: "RECETTE", hint: "Le [CHEF] prépare un délicieux [PLAT] sur une [POELE] bien chaude avec une pincée de [SEL] et de [POIVRE], rédige un [MENU] appétissant, puis utilise le [FOUR] et une [SAUCE] onctueuse pour réussir sa parfaite [RECETTE]." },
                 { word: "PATISSERIE", hint: "Pour réussir une exquise [PATISSERIE], le pâtissier mélange de la [FARINE], du [SUCRE], un [OEUF] et de la [CREME] fraîche, avant de cuire le tout dans le [FOUR] de son [FOURNEAU]." },
@@ -444,7 +444,7 @@
         },
         danse: { 
             name: "Danse", 
-            bank: ["BAL", "PAS", "TANGO", "VALSE", "SALSA", "CORPS", "RYTHME", "DANSE", "GESTES", "CLUB", "PISTE", "SHOW", "MOUVEMENT", "RYTHME"],
+            bank: ["BAL", "PAS", "TANGO", "VALSE", "SALSA", "CORPS", "RYTHME", "DANSE", "GESTES", "CLUB", "PISTE", "SHOW", "MOUVEMENT"],
             mysteries: [
                 { word: "BALLET", hint: "Pour préparer le grand [BAL], chaque [PAS] précis de [TANGO], de [VALSE] ou de [SALSA] exécuté par la [DANSE] demande au [CORPS] de suivre le parfait [BALLET]." },
                 { word: "CADENCE", hint: "Sur la [PISTE] illuminée du [CLUB], chaque [DANSE] enflammée et chaque [GESTES] en harmonie avec le [RYTHME] entraînent les danseurs dans une folle [CADENCE]." }
@@ -556,8 +556,12 @@
         const themeObj = themesData[currentThemeKey];
         
         const mysteryObj = themeObj.mysteries.find(m => m.word === savedGame.currentThemeMystery) || themeObj.mysteries[0];
+        const matches = mysteryObj.hint.match(/\[(.*?)\]/g) || [];
+        let hintWords = matches.map(m => m.slice(1, -1));
+        let selectedWords = [...new Set(hintWords)].filter(w => w !== mysteryObj.word);
+
         currentTheme = {
-            words: savedGame.placedWords.filter(w => !w.isMystery).map(w => w.word),
+            words: selectedWords,
             mystery: mysteryObj.word,
             hint: mysteryObj.hint
         };
@@ -645,6 +649,7 @@
         currentThemeKey = themeKey;
         const themeObj = themesData[themeKey];
         
+        // Sélection aléatoire d'une phrase mystère parmi celles disponibles pour ce thème
         const randMystery = themeObj.mysteries[Math.floor(Math.random() * themeObj.mysteries.length)];
         
         // Extraction automatique de tous les mots présents entre crochets dans la phrase d'indice
@@ -676,13 +681,6 @@
         saveGameState();
     }
 
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
-
     function calculateTargetScore() {
         const allWords = [...currentTheme.words, currentTheme.mystery];
         targetScore = allWords.reduce((acc, word) => acc + (word.length * 10), 0) + 100;
@@ -695,11 +693,12 @@
         gridData = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
         
         placedWords = [];
+        // 4 directions possibles (Horizontal droite/gauche, Vertical bas/haut)
         let directions = [
-            {r: 0, c: 1},  
-            {r: 1, c: 0},  
-            {r: 0, c: -1}, 
-            {r: -1, c: 0}  
+            {r: 0, c: 1},   // Droite ->
+            {r: 1, c: 0},   // Bas v
+            {r: 0, c: -1},  // Gauche <-
+            {r: -1, c: 0}   // Haut ^
         ];
 
         const wordsToPlace = [...currentTheme.words, currentTheme.mystery];
@@ -709,7 +708,7 @@
             let attempts = 0;
             const isMysteryWord = (word === currentTheme.mystery);
 
-            while (!placed && attempts < 200) {
+            while (!placed && attempts < 300) {
                 attempts++;
                 let dir = directions[Math.floor(Math.random() * directions.length)];
                 
@@ -789,7 +788,7 @@
     function getMaskedWordString(item) {
         let maskedArr = [];
         for(let i=0; i<item.word.length; i++) {
-            if(item.hintIndices.includes(i) || item.isMystery) {
+            if(item.hintIndices.includes(i)) {
                 maskedArr.push(item.word[i]);
             } else {
                 maskedArr.push('_');
@@ -928,6 +927,13 @@
     function giveUpMystery() {
         if (isGameFinished) return;
         document.getElementById('mystery-input').value = currentTheme.mystery;
+    }
+
+    function triggerVictory(msg) {
+        isGameFinished = true;
+        document.getElementById('victory-text').innerText = msg;
+        document.getElementById('victory-box').classList.remove('hidden');
+        saveGameState();
     }
 </script>
 
