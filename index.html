@@ -213,11 +213,6 @@
             font-family: inherit;
         }
 
-        .word-item.mystery-word-item {
-            border-color: #818cf8;
-            background: rgba(129, 140, 248, 0.1);
-        }
-
         .btn-action {
             background-color: var(--primary);
             color: white;
@@ -807,17 +802,14 @@
         placedWords.forEach((item, index) => {
             const li = document.createElement('li');
             li.className = 'word-item';
-            if (item.isMystery) {
-                li.classList.add('mystery-word-item');
-            }
             li.id = `word-item-${index}`;
             
             if (item.found) {
                 li.classList.add('found');
-                li.innerHTML = `<span>${item.isMystery ? '⭐ ' : ''}${item.word}</span> <span>✓</span>`;
+                li.innerHTML = `<span>${item.word}</span> <span>✓</span>`;
             } else {
                 const maskedStr = getMaskedWordString(item);
-                li.innerHTML = `<span>${item.isMystery ? '⭐ ' : ''}${maskedStr}</span> <span>+${item.word.length * 10} pts</span>`;
+                li.innerHTML = `<span>${maskedStr}</span> <span>+${item.word.length * 10} pts</span>`;
             }
             listEl.appendChild(li);
         });
@@ -826,9 +818,14 @@
     function updateMysteryHint() {
         let hintText = currentTheme.hint;
         placedWords.forEach(item => {
-            let replacement = item.found ? item.word : getMaskedWordString(item);
             let regex = new RegExp(`\\[${item.word}\\]`, 'g');
-            hintText = hintText.replace(regex, `[${replacement}]`);
+            if (item.isMystery) {
+                let replacement = item.found ? item.word : '...';
+                hintText = hintText.replace(regex, replacement);
+            } else {
+                let replacement = item.found ? item.word : getMaskedWordString(item);
+                hintText = hintText.replace(regex, `[${replacement}]`);
+            }
         });
         document.getElementById('mystery-hint').innerHTML = "Indice : " + hintText;
     }
