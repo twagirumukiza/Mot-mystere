@@ -185,24 +185,22 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 250px;
-            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
         }
 
         .word-item {
             background: var(--bg-color);
             color: var(--text-color);
-            padding: 8px 12px;
+            padding: 6px 8px;
             border-radius: 6px;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid var(--border);
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             font-family: monospace;
         }
 
@@ -564,233 +562,399 @@
                 "FLUIDITE", "TENSION", "RELÂCHEMENT", "IMPROVISATION", "FREE", "STYLE", "BATTLE", "JAM", "CYPHER", "CREW", 
                 "CONCOURS", "SCENE", "SPECTACLE", "FESTIVAL", "OPERA", "THEATRE", "CABARET", "MUSIC", "HALL", "DISCO", 
                 "CLUBBING", "BOITE", "NUIT", "FIESTA", "FETE", "SOIREE", "RAVE", "ELECTRO", "TECHNO", "HOUSE", 
-                "TRANCE", "DUBSTEP", "AMBIENT", "FUNK", "SOUL", "RNB", "REGGAE", "SKA", "PUNK", "METAL"
-            ]
-        },
-        sport: { 
-            name: "Sport", 
-            bank: [
-                "BALLON", "COURIR", "MATCH", "SCORE", "EQUIPE", "JEU", "CHAMP", "PISTE", "COURSE", "LIGNE", 
-                "CHRONO", "EFFORT", "PODIUM", "MEDAILLE", "SPORT", "VICTOIRE", "CHAMPION", "ATHLETE", "ENTRAINEUR", "COACH", 
-                "ARBITRE", "STADE", "ARENE", "GYMNASE", "TERRAIN", "BASSIN", "RING", "TATAMI", "VELODROME", "CIRCUIT", 
-                "TENNIS", "BASKET", "FOOTBALL", "RUGBY", "HANDBALL", "VOLLEYBALL", "BASKETBALL", "WATERPOLO", "HOCKEY", "CRICKET", 
-                "BASEBALL", "SOFTBALL", "GOLF", "ATHLETISME", "NATATION", "PLONGEE", "GYMNASTIQUE", "ESCRIME", "BOXE", "JUDO", 
-                "KARATE", "TAEKWONDO", "LUTTE", "AIKIDO", "KUNG", "FU", "CYCLISME", "TRIATHLON", "MARATHON", "SPRINT", 
-                "HAIE", "PERCHE", "LONGUEUR", "HAUTEUR", "POIDS", "DISQUE", "JAVELOT", "MARTEAU", "DECATHLON", "HEPTATHLON", 
-                "PATINAGE", "SKI", "SNOWBOARD", "LUGE", "BOBSLEIGH", "BIATHLON", "CURLING", "HOCKEY", "SURF", "VOILE", 
-                "AVIRON", "CANOE", "KAYAK", "SURF", "KITE", "SURF", "PLANCHE", "VOILE", "ESCALADE", "ALPINISME", 
-                "RANDONNEE", "TREKKING", "TIR", "ARC", "BALLE", "FUSIL", "EQUITATION", "POLO", "PATIN", "ROULETTE", 
-                "SKATEBOARD", "TROT", "TENNIS", "TABLE", "BADMINTON", "SQUASH", "PADEL", "PELOTE", "BOULE", "PETANQUE", 
-                "BILLARD", "BOWLING", "FLÉCHETTE", "ESCALADE", "CROSSFIT", "MUSCULATION", "FITNESS", "YOGA", "PILATES", "STRETCHING", 
-                "BOXE", "THAI", "KICK", "BOXE", "SAVATE", "MMA", "VALE", "TUDO", "ULTIMATE", "FRISBEE", 
-                "QUIDDITCH", "CHEERLEADING", "DANSE", "SPORTIVE", "GYM", "RYTHMIQUE", "TRAMPOLINE", "PLONGE", "HAUT", "VOL", 
-                "WATER", "POLO", "REGATE", "AMERICAIN", "GRIDIRON", "LACROSSE", "HURDLING", "STEEPLE", "CHASE", "PENTATHLON", 
-                "TRIATHLON", "IRONMAN", "ULTRA", "TRAIL", "RALLYE", "FORMULE", "UN", "KARTING", "MOTO", "GP", 
-                "ENDURANCE", "24", "HEURES", "LE", "MANS", "BOXE", "SAVATE", "ESCRIME", "FLEURET", "EPEE", "SABRE", 
-                "JUDOKA", "KARATEX", "BLACK", "BELT", "TATAMI", "DOJO", "RING", "CORDE", "GANT", "PROTEGER", 
-                "CASQUE", "MAILLOT", "SHORT", "CHAUSSURE", "POINT", "MANCHE", "QUART", "TEMPS", "PROLONGATION", "TIR"
-            ]
-        },
-        football: { 
-            name: "Football", 
-            bank: [
-                "BUT", "STADE", "ARBITRE", "TACLE", "MATCH", "JOUEUR", "FAUTE", "BALLON", "MAILLOT", "PASS", 
-                "TIR", "GARDIEN", "LIGNE", "COACH", "CLUB", "TROPHEE", "VICTOIRE", "EQUIPE", "PELOUSE", "BORDURE", 
-                "CAGE", "FILET", "PIQUET", "CORNER", "TOUCHE", "CENTRE", "SURFACE", "REPARATION", "PENALTY", "COUP", 
-                "FRANC", "MUR", "CARTON", "JAUNE", "ROUGE", "EXPULSION", "AVERTISSEMENT", "OFF", "SIDE", "HORS", 
-                "JEU", "ATTAQUANT", "DEFENSEUR", "MILIEU", "ATTAQUE", "DEFENSE", "CAPITAINE", "REMPLACANT", "BANC", "BORD", 
-                "TERRAIN", "FEU", "DE", "GAON", "CHAMPIONNAT", "COUPE", "MONDE", "EURO", "LIGUE", "CHAMPIONS", 
-                "EUROPA", "SUPER", "BALLON", "D", "OR", "MERCATO", "TRANSFERT", "CONTRAT", "STRIKER", "GOAL", "KEEPER", 
-                "DEFENDER", "MIDFIELDER", "WINGER", "LIBERO", "STOPER", "PIVOT", "EXTRÊME", "LATERAL", "RETRO", "PASSE", 
-                "DOUBLE", "CONTACT", "CONTRE", "ATTAQUE", "PRESSING", "BLOC", "AUT", "GOAL", "CSC", "LOB", 
-                "VOLEE", "DEMI", "BIC", "RETOURNADE", "ACROBATIE", "PLONGEON", "PARADE", "MAIN", "GANTS", "CRAMPON", 
-                "PROTÈGE", "TIBIAS", "BAS", "SHORT", "CAPITAINE", "BRACELET", "FANION", "ETAT", "MAJOR", "PRESIDENT", 
-                "SUPPORTER", "ULTRA", "TIFOSI", "KOP", "VIRAGE", "STADE", "ENCEINTE", "GUICHET", "BILLET", "ABONNEMENT", 
-                "PARC", "PRINCES", "VELODROME", "WANDA", "METROPOLITANO", "CAMP", "NOU", "BERNABEU", "OLD", "TRAFFORD", 
-                "ANFIELD", "WEMBLEY", "SAN", "SIRO", "ALLIANZ", "ARENA", "SIGNAL", "IDUNA", "PARK", "DRAGAO", 
-                "JOSE", "ALVALADE", "DA", "LUZ", "ESTADIO", "NACIONAL", "MARACANA", "MONUMENTAL", "LA", "BOMBONERA", "CENTENARIO", 
-                "AZTECA", "METLIFE", "ROSE", "BOWL", "COMM", "COMM", "COMMISSION", "DISCIPLINAIRE", "VAR", "VIDEO", 
-                "ASSISTANCE", "ARBITRAGE", "RALENTI", "VISIONNAGE", "MONITEUR", "OR", "VICTOIRE", "DEFAITE", "MATCH", "NUL", 
-                "PROLONGATIONS", "TIRS", "AU", "BUT", "SEANCE", "TENSION", "EXPLOSION", "JOIE", "TROPHEE", "COUPE", 
-                "MEDAILLE", "PODIUM", "TOUR", "HONNEUR", "FOULARD", "DRAPEAU", "HYMNE", "NATIONAL", "COUP", "ENVOI"
-            ]
-        },
-        informatique: { 
-            name: "Informatique", 
-            bank: [
-                "CODE", "BUG", "LIGNE", "DATA", "RESEAU", "WEB", "CLIC", "ECRAN", "CLAVIER", "SOURIS", 
-                "PROG", "INDEX", "CLOUD", "SERVEUR", "SITE", "LIEN", "HACK", "LOGICIEL", "INTERNET", "PROGRAMME", 
-                "ALGORITHME", "FONCTION", "VARIABLE", "CONSTANTE", "TABLEAU", "OBJET", "CLASSE", "METHODE", "BOUCLE", "CONDITION", 
-                "TEST", "DEBUG", "COMPILATEUR", "INTERPRETE", "SOURCE", "BINAIRE", "OCTET", "BIT", "MEGA", "GIGA", 
-                "TERA", "PETA", "PROCESSEUR", "MEMOIRE", "RAM", "DISQUE", "DUR", "SSD", "CARTE", "MERE", 
-                "CARTE", "GRAPHIQUE", "GPU", "CPU", "ALIMENTATION", "BOITIER", "VENTILATEUR", "CLAVIER", "TACTILE", "ECRAN", 
-                "RETINA", "MONITEUR", "IMPRIMANTE", "SCANNER", "ROUTEUR", "SWITCH", "MODEM", "FIBRE", "OPTIQUE", "WIFI", 
-                "BLUETOOTH", "ETHERNET", "PORT", "USB", "HDMI", "VGA", "JACK", "BASE", "DONNEES", "SQL", 
-                "MYSQL", "MONGODB", "POSTGRES", "ORACLE", "FIREBASE", "API", "REST", "JSON", "XML", "HTML", 
-                "CSS", "JAVASCRIPT", "PYTHON", "JAVA", "C", "PLUS", "PHP", "RUBY", "SWIFT", "KOTLIN", 
-                "TYPESCRIPT", "REACT", "ANGULAR", "VUE", "NODE", "EXPRESS", "DJANGO", "FLASK", "LARAVEL", "SYMFONY", 
-                "GIT", "GITHUB", "GITLAB", "VERSION", "COMMIT", "PUSH", "PULL", "MERGE", "BRANCH", "REPO", 
-                "CONTAINER", "DOCKER", "KUBERNETES", "LINUX", "WINDOWS", "MACOS", "ANDROID", "IOS", "UNIX", "DEBIAN", 
-                "UBUNTU", "CENTOS", "FEDORA", "ARCH", "KALI", "SECURITE", "CYBER", "FIREWALL", "VPN", "SSL", 
-                "HTTPS", "CHIFFREMENT", "HASH", "SALT", "TOKEN", "JWT", "AUTHENTIFICATION", "AUTORISATION", "ADMIN", "ROOT", 
-                "PASSWORD", "LOGIN", "SESSION", "COOKIE", "CACHE", "PROXY", "DNS", "IP", "IPV4", "IPV6", 
-                "MAC", "ADRESSE", "HOST", "DOMAINE", "HEBERGEMENT", "DEPLOY", "PRODUCTION", "STAGING", "TESTING", "BACKUP", 
-                "RESTORE", "CRASH", "EXCEPTION", "ERREUR", "WARNING", "LOGS", "CONSOLE", "TERMINAL", "SHELL", "BASH", 
-                "POWERSHELL", "SCRIPT", "AUTOMATION", "BOT", "ARTIFICIELLE", "INTELLIGENCE", "MACHINE", "LEARNING", "DEEP", "NEURAL"
-            ]
-        },
-        musique: { 
-            name: "Musique", 
-            bank: [
-                "NOTE", "RYTHME", "BASS", "VOIX", "CD", "SON", "OPERA", "PIANO", "GUITARE", "CORDE", 
-                "ACCORD", "CHANT", "SCENE", "MICRO", "ROCK", "SALLE", "MELODIE", "CONCERT", "PARTITION", "SOLFEGE", 
-                "PORTEE", "CLE", "SOL", "FA", "UT", "BLANCHE", "NOIRE", "CROCHE", "DOUBLE", "CROCHE", 
-                "PAUSE", "DEMI", "MESURE", "TEMPO", "METRONOME", "ALLEGRO", "ADAGIO", "PRESTO", "MODERATO", "ANDANTE", 
-                "VIOLIN", "VIOLON", "ALTO", "VIONCELLE", "CONTREBASSE", "HARPE", "LUTH", "BANJO", "UKULELE", "MANDOLINE", 
-                "FLUTE", "HAUT", "BOIS", "CLARINETTE", "SAXOPHONE", "TROMPETTE", "TROMBONE", "TUBA", "COR", "CLARINET", 
-                "BATTERIE", "CYMBALE", "TAMBOUR", "CAISSE", "CLAIRE", "GROSSE", "CAISSE", "TIMBALE", "XYLOPHONE", "MARIMBA", 
-                "VIBRAPHONE", "ACCORDEON", "ORGUE", "SYNTHETISEUR", "CLAVIER", "SAMPLEUR", "PLATINE", "VINYLE", "CASSETTE", "MP3", 
-                "STREAMING", "ALBUM", "EP", "SINGLE", "TITRE", "MORCEAU", "CHANSON", "PAROLE", "REFRAIN", "COUPLET", 
-                "PONT", "INTRO", "OUTRO", "SOLO", "IMPRO", "JAM", "SESSION", "ORCHESTRE", "PHILHARMONIQUE", "SYMPHONIE", 
-                "CONCERTO", "SONATE", "QUATUOR", "TRIO", "DUO", "CHOEUR", "CHORALE", "MAITRISE", "CHEF", "ORCHESTRE", 
-                "BATTEUR", "GUITARISTE", "PIANISTE", "VIOLONISTE", "CHANTEUR", "CHANTEUSE", "DIVA", "TENOR", "SOPRANO", "BARITON", 
-                "BASSE", "ALTO", "MEZZO", "FALSETTO", "VIBRATO", "ACCENT", "TIMBRE", "FREQUENCE", "DECIBEL", "VOLUME", 
-                "GAUCHE", "DROITE", "STEREO", "MONO", "MIX", "MASTERING", "STUDIO", "ENREGISTREMENT", "MICROPHONE", "CASQUE", 
-                "AMPLIFICATEUR", "ENCEINTE", "TABLE", "MIXAGE", "JACK", "XLR", "MIDI", "FREQUENCE", "ACCORDAGE", "DIAPASON", 
-                "BLUES", "JAZZ", "POP", "ROCK", "METAL", "PUNK", "REGGAE", "FUNK", "SOUL", "RNB", 
-                "RAP", "HIP", "HOP", "ELECTRONIQUE", "TECHNO", "HOUSE", "TRANCE", "AMBIENT", "CLASSIQUE", "BAROQUE", 
-                "CLASSIQUE", "ROMANTIQUE", "MODERN", "CONTEMPORAIN", "FOLK", "COUNTRY", "LATINO", "SALSA", "TANGO", "BOSSA"
-            ]
-        },
-        cinema: { 
-            name: "Cinéma", 
-            bank: [
-                "FILM", "PLAN", "ACTEUR", "SCENE", "CADRE", "SALLE", "STAR", "BOITE", "DECOR", "DIRECTEUR", 
-                "GENRE", "ACTION", "COUP", "ECRAN", "BILLET", "CAMERA", "SCENARIO", "REALISATEUR", "METTEUR", "EN", 
-                "SCENE", "PRODUCTOR", "PRODUCTEUR", "DISTRIBUTOR", "DISTRIBUTEUR", "CASTING", "AUDITION", "FIGURANT", "STUNT", "CASCADEUR", 
-                "DOUBLE", "MAQUILLAGE", "COSTUME", "EFFET", "SPECIAL", "NUMERIQUE", "CGI", "ANIMATION", "STOP", "MOTION", 
-                "LONG", "METRAGE", "COURT", "METRAGE", "MOYEN", "METRAGE", "DOCUMENTAIRE", "REPORTAGE", "FICTION", "ANIMATION", 
-                "COMEDIE", "DRAME", "THRILLER", "POLICIER", "HORREUR", "TERREUR", "FANTASTIQUE", "SCIENCE", "FICTION", "AVENTURE", 
-                "WESTERN", "PEPLUM", "HISTORIQUE", "BIOPIC", "ANIMATION", "MUSICAL", "ROMANCE", "NOIR", "EXPÉRIMENTAL", "AVANT", 
-                "GARDE", "BLOCKBUSTER", "INDIE", "AUTEUR", "CINE", "CLUB", "FESTIVAL", "CANNES", "VENISE", "BERLIN", 
-                "OSCAR", "CESAR", "GOLDEN", "GLOBE", "PALME", "OR", "LION", "OURS", "GRAND", "PRIX", 
-                "PROJECTION", "SEANCE", "AVANT", "PREMIERE", "TAPIS", "ROUGE", "MONITEUR", "CLAP", "BOITE", "PE", 
-                "PE", "PELLICULE", "BOBINE", "PROJECTIONS", "LANTERNE", "MAGIQUE", "FRERES", "LUMIERE", "MELIES", "GRIFFITH", 
-                "CHAPLIN", "KEATON", "LLOYD", "HITCHCOCK", "KUBRICK", "SPIELBERG", "SCORSESE", "TARANTINO", "NOLAN", "FINCHER", 
-                "VILLENEUVE", "CAMERON", "LINDCH", "GODARD", "TRUFFAUT", "RENOIR", "FELLINI", "VISCONTI", "BERGMAN", "AKIRO", 
-                "KUROSAWA", "MIYAZAKI", "OSAKA", "HOLLYWOOD", "BOLLYWOOD", "NOLLYWOOD", "STUDIO", "WARNER", "DISNEY", "PARAMOUNT", 
-                "UNIVERSAL", "COLUMBIA", "FOX", "METRO", "GOLDWYN", "MAYER", "PIXAR", "DREAMWORKS", "NETFLIX", "PRIME", 
-                "DISNEY", "PLUS", "HBO", "APPLE", "TV", "SALLE", "CINEMA", "FAUTEUIL", "POP", "CORN", 
-                "FRIANDISE", "ENTRACTE", "GENERIQUE", "DEBUT", "FIN", "GENERIQUE", "CREDITS", "STORYBOARD", "SCRIPT", "CONTINUITE", 
-                "CADREUR", "CHEF", "OPERATEUR", "LUMIERE", "ELECTRICIEN", "MAC", "MIXEUR", "MONTEUR", "MONTAGGE", "BOUT", "FICHE"
+                "TRANCE"
             ]
         }
     };
 
     let currentThemeKey = null;
-    let currentTheme = null;
-    let gridData = [];
-    let placedWords = [];
-    let foundWordsCount = 0;
+    let grid = [];
+    let wordsToFind = [];
+    let foundWords = [];
+    let selectedCells = [];
+    let isMouseDown = false;
     let score = 0;
     let targetScore = 0;
-    let selectedCells = [];
-    let isGameFinished = false;
-    let wrongMysteryAttempts = [];
-    const gridSize = 10;
+    let mysteryWordObj = null;
 
-    const themeGridEl = document.getElementById('theme-grid');
-    for (let key in themesData) {
-        const btn = document.createElement('button');
-        btn.className = 'theme-btn';
-        btn.innerText = themesData[key].name;
-        btn.onclick = () => startGame(key);
-        themeGridEl.appendChild(btn);
-    }
-
-    window.onload = function() {
-        const savedSettings = JSON.parse(localStorage.getItem('mots_mysteres_settings'));
-        if (savedSettings) {
-            setThemeMode(savedSettings.themeMode || 'dark');
-            setFontSize(savedSettings.fontSize || 'medium');
-            document.getElementById('font-size-select').value = savedSettings.fontSize || 'medium';
+    function initMenu() {
+        const gridContainer = document.getElementById('theme-grid');
+        gridContainer.innerHTML = '';
+        for (const key in themesData) {
+            const btn = document.createElement('button');
+            btn.className = 'theme-btn';
+            btn.textContent = themesData[key].name;
+            btn.onclick = () => startGame(key);
+            gridContainer.appendChild(btn);
         }
-
-        const savedGame = JSON.parse(localStorage.getItem('mots_mysteres_game'));
-        if (savedGame && savedGame.currentThemeKey) {
-            restoreGame(savedGame);
-        }
-    };
-
-    function saveSettings() {
-        const isLight = document.body.classList.contains('light-theme');
-        const fontSizeSelect = document.getElementById('font-size-select').value;
-        localStorage.setItem('mots_mysteres_settings', JSON.stringify({
-            themeMode: isLight ? 'light' : 'dark',
-            fontSize: fontSizeSelect
-        }));
+        loadSettingsFromStorage();
     }
 
-    function saveGameState() {
-        if (!currentThemeKey) return;
-        const gameState = {
-            currentThemeKey,
-            currentThemeMystery: currentTheme.mystery,
-            currentThemeWords: currentTheme.words,
-            currentThemeHint: currentTheme.hint,
-            gridData,
-            placedWords,
-            foundWordsCount,
-            score,
-            targetScore,
-            mysteryInputVal: document.getElementById('mystery-input').value,
-            wrongMysteryAttempts,
-            isGameFinished
-        };
-        localStorage.setItem('mots_mysteres_game', JSON.stringify(gameState));
-    }
-
-    function restoreGame(savedGame) {
-        currentThemeKey = savedGame.currentThemeKey;
-        const themeObj = themesData[currentThemeKey];
-        
-        currentTheme = {
-            words: savedGame.currentThemeWords,
-            mystery: savedGame.currentThemeMystery,
-            hint: savedGame.currentThemeHint
-        };
-        
-        gridData = savedGame.gridData;
-        placedWords = savedGame.placedWords;
-        foundWordsCount = savedGame.foundWordsCount;
-        score = savedGame.score;
-        targetScore = savedGame.targetScore;
-        wrongMysteryAttempts = savedGame.wrongMysteryAttempts || [];
-        isGameFinished = savedGame.isGameFinished;
-
-        document.getElementById('current-theme-name').innerText = themeObj.name;
+    function startGame(themeKey) {
+        currentThemeKey = themeKey;
+        document.getElementById('current-theme-name').textContent = themesData[themeKey].name;
         document.getElementById('menu-screen').classList.add('hidden');
         document.getElementById('game-screen').classList.remove('hidden');
-        document.getElementById('mystery-input').value = savedGame.mysteryInputVal || '';
-        document.getElementById('current-score').innerText = score;
-        document.getElementById('target-score').innerText = targetScore;
+        document.getElementById('victory-box').classList.add('hidden');
 
-        renderRestoredGrid();
-        renderWordsList();
+        loadGameState();
+    }
+
+    function returnToMenu() {
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('menu-screen').classList.remove('hidden');
+    }
+
+    function resetCurrentGame() {
+        if (!currentThemeKey) return;
+        localStorage.removeItem('mots_mysteres_' + currentThemeKey);
+        startGame(currentThemeKey);
+    }
+
+    function generateNewGame(themeKey) {
+        const bank = themesData[themeKey].bank;
+        
+        // Choisir un mot mystère aléatoire (entre 3 et 8 lettres)
+        const validMysteryWords = bank.filter(w => w.length >= 3 && w.length <= 8);
+        mysteryWordObj = {
+            word: validMysteryWords[Math.floor(Math.random() * validMysteryWords.length)],
+            wrongAttempts: []
+        };
+        
+        // Choisir 6 mots pour la grille
+        const shuffledBank = [...bank].filter(w => w !== mysteryWordObj.word).sort(() => 0.5 - Math.random());
+        wordsToFind = shuffledBank.slice(0, 6).map(w => ({ word: w, found: false }));
+        
+        targetScore = wordsToFind.length * 10;
+        score = 0;
+        foundWords = [];
+
+        buildGridAndPlaceWords();
         updateMysteryHint();
-        renderWrongAttempts();
+        renderGame();
+    }
 
-        if (isGameFinished) {
-            document.getElementById('victory-box').classList.remove('hidden');
-        } else {
-            document.getElementById('victory-box').classList.add('hidden');
+    function buildGridAndPlaceWords() {
+        const size = 10;
+        grid = Array(size).fill(null).map(() => Array(size).fill(''));
+
+        const allWords = wordsToFind.map(w => w.word);
+        
+        const directions = [
+            { r: 0, c: 1 },   // Horizontal droite
+            { r: 1, c: 0 },   // Vertical bas
+            { r: 1, c: 1 },   // Diagonal bas-droite
+            { r: 0, c: -1 },  // Horizontal gauche
+            { r: -1, c: 0 }   // Vertical haut
+        ];
+
+        for (let wordObj of wordsToFind) {
+            const word = wordObj.word;
+            let placed = false;
+            let attempts = 0;
+
+            while (!placed && attempts < 100) {
+                attempts++;
+                const dir = directions[Math.floor(Math.random() * directions.length)];
+                const startR = Math.floor(Math.random() * size);
+                const startC = Math.floor(Math.random() * size);
+
+                const endR = startR + dir.r * (word.length - 1);
+                const endC = startC + dir.c * (word.length - 1);
+
+                if (endR >= 0 && endR < size && endC >= 0 && endC < size) {
+                    let canPlace = true;
+                    for (let i = 0; i < word.length; i++) {
+                        const r = startR + dir.r * i;
+                        const c = startC + dir.c * i;
+                        if (grid[r][c] !== '' && grid[r][c] !== word[i]) {
+                            canPlace = false;
+                            break;
+                        }
+                    }
+
+                    if (canPlace) {
+                        for (let i = 0; i < word.length; i++) {
+                            const r = startR + dir.r * i;
+                            const c = startC + dir.c * i;
+                            grid[r][c] = word[i];
+                        }
+                        placed = true;
+                    }
+                }
+            }
+        }
+
+        // Remplir les cases vides par des lettres aléatoires
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        for (let r = 0; r < size; r++) {
+            for (let c = 0; c < size; c++) {
+                if (grid[r][c] === '') {
+                    grid[r][c] = alphabet[Math.floor(Math.random() * alphabet.length)];
+                }
+            }
         }
     }
 
+    function renderGame() {
+        // Grille HTML
+        const container = document.getElementById('grid-container');
+        container.innerHTML = '';
+        for (let r = 0; r < 10; r++) {
+            for (let c = 0; c < 10; c++) {
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell';
+                cell.dataset.row = r;
+                cell.dataset.col = c;
+                cell.textContent = grid[r][c];
+
+                // Vérifier si la cellule fait partie d'un mot trouvé
+                const isFound = wordsToFind.some(w => w.found && isCellInWord(r, c, w.word));
+                if (isFound) {
+                    cell.classList.add('found');
+                }
+
+                cell.addEventListener('mousedown', () => startSelection(r, c));
+                cell.addEventListener('mouseenter', () => continueSelection(r, c));
+                cell.addEventListener('mouseup', endSelection);
+
+                container.appendChild(cell);
+            }
+        }
+
+        document.addEventListener('mouseup', () => {
+            if (isMouseDown) endSelection();
+        });
+
+        // Liste des mots
+        const listEl = document.getElementById('words-list');
+        listEl.innerHTML = '';
+        wordsToFind.forEach(w => {
+            const li = document.createElement('li');
+            li.className = 'word-item' + (w.found ? ' found' : '');
+            li.innerHTML = `<span>${w.found ? w.word : obfuscateWord(w.word)}</span><span>${w.found ? '✓' : ''}</span>`;
+            listEl.appendChild(li);
+        });
+
+        document.getElementById('current-score').textContent = score;
+        document.getElementById('target-score').textContent = targetScore;
+
+        checkVictory();
+        saveGameState();
+    }
+
+    function obfuscateWord(word) {
+        return word.split('').map((l, i) => i === 0 || i === word.length - 1 ? l : '_').join(' ');
+    }
+
+    function isCellInWord(r, c, word) {
+        // Recherche simplifiée pour marquer visuellement les cellules trouvées
+        // Pour être robuste, on stocke les coordonnées exactes des mots trouvés
+        if (window.foundWordCoords && window.foundWordCoords[word]) {
+            return window.foundWordCoords[word].some(coord => coord.r === r && coord.c === c);
+        }
+        return false;
+    }
+
+    if (!window.foundWordCoords) window.foundWordCoords = {};
+
+    // Sélection des mots à la souris
+    function startSelection(r, c) {
+        isMouseDown = true;
+        selectedCells = [{ r, c }];
+        updateSelectionUI();
+    }
+
+    function continueSelection(r, c) {
+        if (!isMouseDown) return;
+        // Éviter les doublons immédiats et garder une ligne droite / diagonale
+        const last = selectedCells[selectedCells.length - 1];
+        if (last.r === r && last.c === c) return;
+
+        // Si on revient en arrière sur l'avant-dernière cellule, on désélectionne
+        if (selectedCells.length > 1 && selectedCells[selectedCells.length - 2].r === r && selectedCells[selectedCells.length - 2].c === c) {
+            selectedCells.pop();
+            updateSelectionUI();
+            return;
+        }
+
+        // Vérifier si c'est aligné avec la première cellule ou la précédente
+        const first = selectedCells[0];
+        const dr = r - first.r;
+        const dc = c - first.c;
+
+        if (dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc)) {
+            // Reconstruire la ligne entre first et (r, c)
+            const len = Math.max(Math.abs(dr), Math.abs(dc)) + 1;
+            const stepR = dr === 0 ? 0 : dr / Math.abs(dr);
+            const stepC = dc === 0 ? 0 : dc / Math.abs(dc);
+
+            selectedCells = [];
+            for (let i = 0; i < len; i++) {
+                selectedCells.push({ r: first.r + stepR * i, c: first.c + stepC * i });
+            }
+            updateSelectionUI();
+        }
+    }
+
+    function updateSelectionUI() {
+        const cells = document.querySelectorAll('.grid-cell');
+        cells.forEach(cell => {
+            const r = parseInt(cell.dataset.row);
+            const c = parseInt(cell.dataset.col);
+            const isSelected = selectedCells.some(cellCoord => cellCoord.r === r && cellCoord.c === c);
+            if (isSelected) {
+                cell.classList.add('selected');
+            } else {
+                cell.classList.remove('selected');
+            }
+        });
+    }
+
+    function endSelection() {
+        if (!isMouseDown) return;
+        isMouseDown = false;
+
+        const wordStr = selectedCells.map(coord => grid[coord.r][coord.c]).join('');
+        const revWordStr = [...selectedCells].reverse().map(coord => grid[coord.r][coord.c]).join('');
+
+        let matchedWordObj = wordsToFind.find(w => !w.found && (w.word === wordStr || w.word === revWordStr));
+
+        if (matchedWordObj) {
+            matchedWordObj.found = true;
+            score += 10;
+            if (!window.foundWordCoords) window.foundWordCoords = {};
+            window.foundWordCoords[matchedWordObj.word] = [...selectedCells];
+            if (matchedWordObj.word !== wordStr) {
+                window.foundWordCoords[matchedWordObj.word].reverse();
+            }
+        }
+
+        selectedCells = [];
+        updateSelectionUI();
+        renderGame();
+        updateMysteryHint();
+    }
+
+    // Gestion du Mot Mystère
+    function updateMysteryHint() {
+        if (!mysteryWordObj) return;
+        const hintEl = document.getElementById('mystery-hint');
+        const foundCount = wordsToFind.filter(w => w.found).length;
+        const totalCount = wordsToFind.length;
+
+        // Révéler des indices progressivement selon les mots trouvés
+        const word = mysteryWordObj.word;
+        let hintDisplay = word.split('').map((char, index) => {
+            // Révéler la première lettre et une lettre tous les X mots trouvés
+            if (index === 0 || index === word.length - 1 || foundCount >= Math.floor((totalCount / word.length) * index)) {
+                return char;
+            }
+            return '_';
+        }).join(' ');
+
+        hintEl.textContent = `Indice (${word.length} lettres) : ${hintDisplay}`;
+    }
+
+    function checkMysteryWord() {
+        const input = document.getElementById('mystery-input');
+        const feedback = document.getElementById('mystery-feedback');
+        const val = input.value.trim().toUpperCase();
+
+        if (!val) return;
+
+        if (val === mysteryWordObj.word) {
+            feedback.style.color = 'var(--accent)';
+            feedback.textContent = '🎉 Bravo ! Vous avez trouvé le mot mystère !';
+            score += 20;
+            document.getElementById('current-score').textContent = score;
+            saveGameState();
+            checkVictory(true);
+        } else {
+            feedback.style.color = 'var(--danger)';
+            feedback.textContent = '❌ Ce n\'est pas le bon mot mystère.';
+            if (!mysteryWordObj.wrongAttempts.includes(val)) {
+                mysteryWordObj.wrongAttempts.push(val);
+                renderWrongAttempts();
+            }
+            input.value = '';
+        }
+    }
+
+    function renderWrongAttempts() {
+        const container = document.getElementById('wrong-attempts-container');
+        if (!mysteryWordObj || mysteryWordObj.wrongAttempts.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
+        container.innerHTML = `<div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;">Propositions incorrectes : ${mysteryWordObj.wrongAttempts.join(', ')}</div>`;
+    }
+
+    function giveUpMystery() {
+        if (!mysteryWordObj) return;
+        const feedback = document.getElementById('mystery-feedback');
+        feedback.style.color = 'var(--danger)';
+        feedback.textContent = `Le mot mystère était : ${mysteryWordObj.word}`;
+        document.getElementById('mystery-input').value = mysteryWordObj.word;
+        document.getElementById('mystery-input').disabled = true;
+        checkVictory(true);
+    }
+
+    function checkVictory(forceWin = false) {
+        const allWordsFound = wordsToFind.every(w => w.found);
+        const victoryBox = document.getElementById('victory-box');
+
+        if (allWordsFound || forceWin) {
+            if (!victoryBox.classList.contains('hidden') && forceWin) return;
+            victoryBox.classList.remove('hidden');
+            document.getElementById('victory-text').textContent = `Score final : ${score} points. Thème ${themesData[currentThemeKey].name} complété !`;
+        }
+    }
+
+    // Sauvegarde & Restauration LocalStorage
+    function saveGameState() {
+        if (!currentThemeKey) return;
+        const state = {
+            grid,
+            wordsToFind,
+            foundWords,
+            score,
+            targetScore,
+            mysteryWordObj,
+            foundWordCoords: window.foundWordCoords,
+            mysteryInput: document.getElementById('mystery-input').value
+        };
+        localStorage.setItem('mots_mysteres_' + currentThemeKey, JSON.stringify(state));
+    }
+
+    function loadGameState() {
+        if (!currentThemeKey) return;
+        const saved = localStorage.getItem('mots_mysteres_' + currentThemeKey);
+        if (saved) {
+            const state = JSON.parse(saved);
+            grid = state.grid;
+            wordsToFind = state.wordsToFind;
+            foundWords = state.foundWords || [];
+            score = state.score;
+            targetScore = state.targetScore;
+            mysteryWordObj = state.mysteryWordObj;
+            window.foundWordCoords = state.foundWordCoords || {};
+            
+            renderGame();
+            updateMysteryHint();
+            renderWrongAttempts();
+            if (state.mysteryInput) {
+                document.getElementById('mystery-input').value = state.mysteryInput;
+            }
+        } else {
+            generateNewGame(currentThemeKey);
+        }
+    }
+
+    // Gestion des modales et paramètres
     function openRules() {
         document.getElementById('rules-modal').classList.remove('hidden');
     }
-
     function closeRules() {
         document.getElementById('rules-modal').classList.add('hidden');
     }
@@ -798,10 +962,8 @@
     function openSettings() {
         document.getElementById('settings-modal').classList.remove('hidden');
     }
-
     function closeSettings() {
         document.getElementById('settings-modal').classList.add('hidden');
-        saveSettings();
     }
 
     function setThemeMode(mode) {
@@ -811,362 +973,36 @@
             document.body.classList.add('light-theme');
             btnLight.className = 'btn-action';
             btnDark.className = 'btn-action btn-secondary';
+            localStorage.setItem('mots_mysteres_theme_mode', 'light');
         } else {
             document.body.classList.remove('light-theme');
             btnDark.className = 'btn-action';
             btnLight.className = 'btn-action btn-secondary';
+            localStorage.setItem('mots_mysteres_theme_mode', 'dark');
         }
-        saveSettings();
     }
 
     function setFontSize(size) {
         document.body.classList.remove('font-small', 'font-medium', 'font-large');
-        if (size === 'small') document.body.classList.add('font-small');
-        else if (size === 'large') document.body.classList.add('font-large');
-        else document.body.classList.add('font-medium');
-        saveSettings();
+        if (size !== 'medium') {
+            document.body.classList.add('font-' + size);
+        }
+        localStorage.setItem('mots_mysteres_font_size', size);
     }
 
-    function returnToMenu() {
-        localStorage.removeItem('mots_mysteres_game');
-        currentThemeKey = null;
-        document.getElementById('game-screen').classList.add('hidden');
-        document.getElementById('menu-screen').classList.remove('hidden');
-        document.getElementById('victory-box').classList.add('hidden');
-    }
-
-    function resetCurrentGame() {
-        if (currentThemeKey) {
-            startGame(currentThemeKey);
+    function loadSettingsFromStorage() {
+        const savedTheme = localStorage.getItem('mots_mysteres_theme_mode');
+        if (savedTheme) {
+            setThemeMode(savedTheme);
+        }
+        const savedFont = localStorage.getItem('mots_mysteres_font_size');
+        if (savedFont) {
+            document.getElementById('font-size-select').value = savedFont;
+            setFontSize(savedFont);
         }
     }
 
-    function shuffleArray(array) {
-        let arr = [...array];
-        for (let i = arr.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-    }
-
-    function startGame(themeKey) {
-        currentThemeKey = themeKey;
-        const themeObj = themesData[themeKey];
-        
-        // Sélection dynamique aléatoire depuis la banque de 300+ mots
-        let shuffledBank = shuffleArray(themeObj.bank.filter(w => w.length >= 3 && w.length <= 8));
-        
-        let mysteryWord = shuffledBank[0];
-        let subWords = shuffledBank.slice(1, 8); // 7 mots aléatoires pour la grille
-
-        let hintSentence = `Dans ce domaine, on retrouve souvent [${subWords[0]}], [${subWords[1]}], [${subWords[2]}], [${subWords[3]}], [${subWords[4]}], [${subWords[5]}] ainsi que [${subWords[6]}], menant tout droit vers le secret [${mysteryWord}].`;
-
-        currentTheme = {
-            words: subWords,
-            mystery: mysteryWord,
-            hint: hintSentence
-        };
-
-        isGameFinished = false;
-        wrongMysteryAttempts = [];
-        document.getElementById('current-theme-name').innerText = themeObj.name;
-        document.getElementById('menu-screen').classList.add('hidden');
-        document.getElementById('game-screen').classList.remove('hidden');
-        document.getElementById('victory-box').classList.add('hidden');
-        document.getElementById('mystery-input').value = "";
-        document.getElementById('mystery-feedback').innerText = "";
-        document.getElementById('wrong-attempts-container').innerHTML = "";
-        
-        score = 0;
-        foundWordsCount = 0;
-        document.getElementById('current-score').innerText = score;
-
-        generateGrid();
-        renderWordsList();
-        updateMysteryHint();
-        calculateTargetScore();
-        saveGameState();
-    }
-
-    function calculateTargetScore() {
-        const allWords = [...currentTheme.words, currentTheme.mystery];
-        targetScore = allWords.reduce((acc, word) => acc + (word.length * 10), 0) + 100;
-        document.getElementById('target-score').innerText = targetScore;
-    }
-
-    function generateGrid() {
-        const container = document.getElementById('grid-container');
-        container.innerHTML = '';
-        gridData = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
-        
-        placedWords = [];
-        let directions = [
-            {r: 0, c: 1},   
-            {r: 1, c: 0},   
-            {r: 0, c: -1},  
-            {r: -1, c: 0}   
-        ];
-
-        const wordsToPlace = [...currentTheme.words, currentTheme.mystery];
-
-        wordsToPlace.forEach(word => {
-            let placed = false;
-            let attempts = 0;
-            const isMysteryWord = (word === currentTheme.mystery);
-
-            while (!placed && attempts < 300) {
-                attempts++;
-                let dir = directions[Math.floor(Math.random() * directions.length)];
-                
-                let startR = Math.floor(Math.random() * gridSize);
-                let startC = Math.floor(Math.random() * gridSize);
-                
-                let endR = startR + (dir.r * (word.length - 1));
-                let endC = startC + (dir.c * (word.length - 1));
-
-                if (endR < 0 || endR >= gridSize || endC < 0 || endC >= gridSize) continue;
-
-                let canPlace = true;
-                let coords = [];
-                for (let i = 0; i < word.length; i++) {
-                    let cr = startR + (dir.r * i);
-                    let cc = startC + (dir.c * i);
-                    if (gridData[cr][cc] !== '' && gridData[cr][cc] !== word[i]) {
-                        canPlace = false;
-                        break;
-                    }
-                    coords.push({r: cr, c: cc});
-                }
-
-                if (canPlace) {
-                    for (let i = 0; i < word.length; i++) {
-                        gridData[coords[i].r][coords[i].c] = word[i];
-                    }
-
-                    let hintCount = word.length <= 5 ? 1 : (word.length <= 10 ? 2 : 3);
-                    let hintIndices = [];
-                    while(hintIndices.length < hintCount && hintIndices.length < word.length) {
-                        let randIdx = Math.floor(Math.random() * word.length);
-                        if(!hintIndices.includes(randIdx)) {
-                            hintIndices.push(randIdx);
-                        }
-                    }
-
-                    placedWords.push({word, coords, found: false, hintIndices, isMystery: isMysteryWord});
-                    placed = true;
-                }
-            }
-        });
-
-        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        for (let r = 0; r < gridSize; r++) {
-            for (let c = 0; c < gridSize; c++) {
-                if (gridData[r][c] === '') {
-                    gridData[r][c] = alphabet[Math.floor(Math.random() * alphabet.length)];
-                }
-            }
-        }
-        renderRestoredGrid();
-    }
-
-    function renderRestoredGrid() {
-        const container = document.getElementById('grid-container');
-        container.innerHTML = '';
-        for (let r = 0; r < gridSize; r++) {
-            for (let c = 0; c < gridSize; c++) {
-                const cell = document.createElement('div');
-                cell.className = 'grid-cell';
-                cell.dataset.r = r;
-                cell.dataset.c = c;
-                cell.innerText = gridData[r][c];
-
-                let isFound = placedWords.some(pw => pw.found && pw.coords.some(coord => coord.r === r && coord.c === c));
-                if (isFound) {
-                    cell.classList.add('found');
-                }
-
-                cell.onmousedown = () => selectCell(r, c, cell);
-                container.appendChild(cell);
-            }
-        }
-    }
-
-    function getMaskedWordString(item) {
-        let maskedArr = [];
-        for(let i=0; i<item.word.length; i++) {
-            if(item.hintIndices.includes(i)) {
-                maskedArr.push(item.word[i]);
-            } else {
-                maskedArr.push('_');
-            }
-        }
-        return maskedArr.join(' ');
-    }
-
-    function renderWordsList() {
-        const listEl = document.getElementById('words-list');
-        listEl.innerHTML = '';
-        placedWords.forEach((item, index) => {
-            const li = document.createElement('li');
-            li.className = 'word-item';
-            li.id = `word-item-${index}`;
-            
-            if (item.found) {
-                li.classList.add('found');
-                li.innerHTML = `<span>${item.word}</span> <span>✓</span>`;
-            } else {
-                const maskedStr = getMaskedWordString(item);
-                li.innerHTML = `<span>${maskedStr}</span> <span>+${item.word.length * 10} pts</span>`;
-            }
-            listEl.appendChild(li);
-        });
-    }
-
-    function updateMysteryHint() {
-        let hintText = currentTheme.hint;
-        placedWords.forEach(item => {
-            let regex = new RegExp(`\\[${item.word}\\]`, 'g');
-            if (item.isMystery) {
-                let replacement = item.found ? item.word : '...';
-                hintText = hintText.replace(regex, replacement);
-            } else {
-                let replacement = item.found ? item.word : getMaskedWordString(item);
-                hintText = hintText.replace(regex, `[${replacement}]`);
-            }
-        });
-        document.getElementById('mystery-hint').innerHTML = "Indice : " + hintText;
-    }
-
-    function selectCell(r, c, cellEl) {
-        if (isGameFinished) return;
-        cellEl.classList.toggle('selected');
-        const index = selectedCells.findIndex(item => item.r === r && item.c === c);
-        if (index > -1) {
-            selectedCells.splice(index, 1);
-        } else {
-            selectedCells.push({r, c});
-        }
-
-        let foundMatched = false;
-        placedWords.forEach(pw => {
-            if (!pw.found && selectedCells.length === pw.coords.length) {
-                const allMatch = pw.coords.every(coord => 
-                    selectedCells.some(sc => sc.r === coord.r && sc.c === coord.c)
-                );
-                if (allMatch) {
-                    pw.found = true;
-                    foundWordsCount++;
-                    score += pw.word.length * 10;
-
-                    document.getElementById('current-score').innerText = score;
-                    foundMatched = true;
-
-                    pw.coords.forEach(coord => {
-                        const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
-                        if (el) {
-                            el.classList.remove('selected');
-                            el.classList.add('found');
-                        }
-                    });
-
-                    if (placedWords.every(w => w.found)) {
-                        triggerVictory("Félicitations ! Vous avez trouvé tous les mots et le mot mystère !");
-                    }
-                }
-            }
-        });
-
-        if (foundMatched) {
-            selectedCells = [];
-            document.querySelectorAll('.grid-cell.selected').forEach(el => {
-                if (!el.classList.contains('found')) {
-                    el.classList.remove('selected');
-                }
-            });
-            
-            renderWordsList();
-            updateMysteryHint();
-        }
-        saveGameState();
-    }
-
-    function checkMysteryWord() {
-        if (isGameFinished) return;
-        const inputVal = document.getElementById('mystery-input').value.trim().toUpperCase();
-        const feedbackEl = document.getElementById('mystery-feedback');
-        
-        if (!inputVal) return;
-
-        if (inputVal === currentTheme.mystery) {
-            feedbackEl.style.color = 'var(--accent)';
-            feedbackEl.innerText = "🎉 Bravo ! C'est le bon mot mystère !";
-            
-            const mysteryObj = placedWords.find(w => w.isMystery);
-            if (mysteryObj && !mysteryObj.found) {
-                mysteryObj.found = true;
-                score += mysteryObj.word.length * 10;
-                mysteryObj.coords.forEach(coord => {
-                    const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
-                    if (el) el.classList.add('found');
-                });
-            }
-            score += 100;
-            document.getElementById('current-score').innerText = score;
-            revealAllRemaining();
-            triggerVictory("Félicitations ! Vous avez trouvé tous les mots et le mot mystère !");
-        } else {
-            if (!wrongMysteryAttempts.includes(inputVal)) {
-                wrongMysteryAttempts.push(inputVal);
-            }
-            feedbackEl.style.color = 'var(--danger)';
-            feedbackEl.innerText = "Ce n'est pas le bon mot. Continuez vos recherches !";
-            renderWrongAttempts();
-        }
-        saveGameState();
-    }
-
-    function renderWrongAttempts() {
-        const container = document.getElementById('wrong-attempts-container');
-        if (!container) return;
-        if (wrongMysteryAttempts.length === 0) {
-            container.innerHTML = '';
-            return;
-        }
-        let html = `<div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px; padding: 8px; background: var(--bg-color); border: 1px solid var(--border); border-radius: 6px;">`;
-        html += `<strong style="color: var(--danger);">Tentatives incorrectes (${wrongMysteryAttempts.length}) :</strong> `;
-        html += wrongMysteryAttempts.join(', ');
-        html += `</div>`;
-        container.innerHTML = html;
-    }
-
-    function revealAllRemaining() {
-        placedWords.forEach((pw) => {
-            if (!pw.found) {
-                pw.found = true;
-                pw.coords.forEach(coord => {
-                    const el = document.querySelector(`[data-r='${coord.r}'][data-c='${coord.c}']`);
-                    if (el) el.classList.add('found');
-                });
-            }
-        });
-        renderWordsList();
-        updateMysteryHint();
-    }
-
-    function giveUpMystery() {
-        if (isGameFinished) return;
-        document.getElementById('mystery-input').value = currentTheme.mystery;
-        checkMysteryWord();
-    }
-
-    function triggerVictory(msg) {
-        isGameFinished = true;
-        document.getElementById('victory-text').innerText = msg;
-        document.getElementById('victory-box').classList.remove('hidden');
-        saveGameState();
-    }
+    window.onload = initMenu;
 </script>
-
 </body>
 </html>
