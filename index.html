@@ -188,6 +188,8 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            max-height: 250px;
+            overflow-y: auto;
         }
 
         .word-item {
@@ -398,92 +400,289 @@
     const themesData = {
         cuisine: { 
             name: "Cuisine", 
-            bank: ["FOUR", "CHEF", "PLAT", "MENU", "SEL", "POIVRE", "SAUCE", "POELE", "LOURD", "GATEAU", "CREME", "SUCRE", "FARINE", "OEUF", "FOURNEAU", "SOUPE", "BOWL", "FEU", "AIL", "POIREAU", "EAU", "LOUCHE", "TARTINE", "BEURRE", "FRITE", "SALADE", "EPICE", "MIJOTER", "GOUT"],
-            mysteries: [
-                { word: "RECETTE", hint: "Le [CHEF] prépare un délicieux [PLAT] sur une [POELE] bien chaude avec une pincée de [SEL] et de [POIVRE], rédige un [MENU] appétissant, puis utilise le [FOUR] et une [SAUCE] onctueuse pour réussir sa parfaite [RECETTE]." },
-                { word: "PATISSERIE", hint: "Pour réussir une exquise [PATISSERIE], le pâtissier mélange de la [FARINE], du [SUCRE], un [OEUF] et de la [CREME] fraîche, avant de cuire le tout dans le [FOUR] de son [FOURNEAU]." },
-                { word: "BOUILLON", hint: "Pour concocter un bon [BOUILLON], on porte de l'[EAU] à ébullition sur le [FEU], on y ajoute de l'[AIL], du [POIREAU] et du [SEL], puis on remue le tout à l'aide d'une [LOUCHE]." }
+            bank: [
+                "FOUR", "CHEF", "PLAT", "MENU", "SEL", "POIVRE", "SAUCE", "POELE", "LOURD", "GATEAU", 
+                "CREME", "SUCRE", "FARINE", "OEUF", "FOURNEAU", "SOUPE", "BOWL", "FEU", "AIL", "POIREAU", 
+                "EAU", "LOUCHE", "TARTINE", "BEURRE", "FRITE", "SALADE", "EPICE", "MIJOTER", "GOUT", "EPICERIE", 
+                "FOURCHETTE", "COUTEAU", "CUILLERE", "ASSIETTE", "VERRE", "TASSE", "NAPPE", "SERVIETTE", "CASSEROLE", "COCOTTE", 
+                "MARMITE", "PASSOIRE", "FOUET", "SPATULE", "RAPE", "LAME", "PLANCHE", "EVIER", "ROBINET", "FRIGO", 
+                "CONGELATEUR", "MICRO", "ONDES", "HOTTE", "TOASTER", "GAUFRIER", "CREPIERE", "BATTEUR", "MIXEUR", "BLENDER", 
+                "ROBOT", "BALANCE", "DOSEUR", "TIMER", "MINUTERIE", "GANT", "TABLIER", "TORCHON", "EPONGE", "POUBELLE", 
+                "POULET", "VIANDE", "POISSON", "LEGUME", "FRUIT", "FROMAGE", "YAOURT", "LAIT", "HUILE", "VINAIGRE", 
+                "VINAIGRETTE", "MOUTARDE", "MAYONNAISE", "KETCHUP", "HERBE", "THYM", "LAURIER", "BASILIC", "PERSIL", "CIBOULETTE", 
+                "MENTHE", "ROMARIN", "OREGANO", "CORIANDRE", "ECHALOTE", "OIGNON", "CAROTTE", "NAVET", "COURGETTE", "AUBERGINE", 
+                "POIVRON", "TOMATE", "LAITUE", "ENDIVE", "EPINARD", "BROCOLI", "CHOU", "PATATE", "POMME", "TERRE", 
+                "RIZ", "PATE", "SEMOULE", "QUINOA", "LENTILLE", "POIS", "HARICOT", "MIEL", "CONFITURE", "CHOCOLAT", 
+                "VANILLE", "CANNELLE", "CACAO", "AMANDE", "NOISETTE", "NOIX", "CAJOU", "PISTACHE", "RAISIN", "FIGUE", 
+                "DATTE", "ABRICOT", "PECHE", "POIRE", "BANANE", "ORANGE", "CITRON", "PAMPLEMOUSSE", "FRAISE", "FRAMBOISE", 
+                "MURE", "MYRTILLE", "CERISE", "KIWI", "ANANAS", "MANGUE", "PAPAYE", "PASTEQUE", "MELON", "BOISSON", 
+                "JUS", "SIROP", "SODA", "THE", "CAFE", "TISANE", "VIN", "BIERE", "CIDRE", "CHAMPAGNE", 
+                "LIQUEUR", "APERITIF", "ENTREE", "DESSERT", "COLLATION", "GOUTER", "PETIT", "DEJEUNER", "DINER", "SUPPER", 
+                "BANQUET", "FESTIN", "BUFFET", "BRUNCH", "BARBECUE", "PLANCHA", "FONDUE", "RACLETTE", "TARTIFLETTE", "GRATIN", 
+                "QUICHE", "TARTE", "PIZZA", "BURGER", "SANDWICH", "WRAP", "TACOS", "KEBAB", "SUSHI", "MAKI", 
+                "RAMEN", "NEMS", "SALTIMBOCCA", "RISOTTO", "PAELLA", "COUSCOUS", "TAGINE", "CASSOULET", "POTEE", "BOUILLABAISSE", 
+                "BLANQUETTE", "BOURGUIGNON", "HACHIS", "PARMENTIER", "OMELETTE", "POTAGE", "VELOUTE", "BOUILLON", "CONSOMME", "BISQUE", 
+                "GACHE", "BRIOCHE", "CROISSANT", "PAIN", "BAGUETTE", "BISCUIT", "COOKIE", "BROWNIE", "MUFFIN", "TARTELETTE", 
+                "ECLAIR", "PROFITEROLE", "MACARON", "MERINGUE", "CHARLOTTE", "BABA", "GAUFRE", "BEIGNET", "CREPE", "GALETTE", 
+                "FLAN", "PUDDING", "MOUSSE", "GELEE", "SORBET", "GLACE", "COMPOTE", "COULIS", "GANACHE", "PRALINE", 
+                "CARAMEL", "NOUGAT", "CONFISERIE", "BONBON", "TRUFFE", "ROCHER", "BARRETTE", "BISCOTTE", "CRACKER", "CHIPS", 
+                "CACAHUETE", "PIZZA", "GNOCCHI", "POLENTA", "RAVIOLI", "LASAGNE", "CANNELLONI", "BRUSCHETTA", "CARPACCIO", "TIRAMISU", 
+                "PANNA", "COTTA", "CANNOLI", "AMARETTO", "GRAPPA", "ESPRESSO", "CAPPUCCino", "LATTE", "MACCHIATO", "MOJITO", 
+                "SPRITZ", "SANGRIA", "DAIQUIRI", "MARGARITA", "MARTINI", "WHISKY", "VODKA", "GIN", "RHUM", "TEQUILA", 
+                "COGNAC", "CALVADOS", "ARMAGNAC", "PORTO", "SHERRY", "VERMOUTH", "ABSINTHE", "CHARTREUSE", "GENEPI", "SAKE"
             ]
         },
         animaux: { 
             name: "Animaux", 
-            bank: ["LION", "TIGRE", "LOUP", "OURS", "ZEBRE", "SINGE", "PANTHERE", "GIRAFE", "CHIEN", "CHAT", "LAPIN", "POISSON", "OISEAU", "HAMSTER", "SOURIS", "TORTUE", "AIGLE", "FAUCON", "HIBOU", "BUSE", "MERLE", "MESANGE", "CORBEAU", "CIGOGNE", "RENARD", "CERF"],
-            mysteries: [
-                { word: "SAUVAGE", hint: "Dans la grande réserve naturelle, le [LION], le [TIGRE], le [LOUP], l'[OURS], le [ZEBRE], le [SINGE], la [PANTHERE] et la [GIRAFE] vivent tous à l'état [SAUVAGE]." },
-                { word: "DOMESTIQUE", hint: "Chaque animal de compagnie comme le [CHIEN], le [CHAT], le [LAPIN], le [POISSON] rouge, l'[OISEAU], le [HAMSTER], la [SOURIS] ou la [TORTUE] mène un quotidien [DOMESTIQUE]." },
-                { word: "VOLAGE", hint: "Dans le ciel azuré, l'[AIGLE], le [FAUCON], l'agile [HIBOU], la [BUSE], le [MERLE], la [MESANGE], le [CORBEAU] et la [CIGOGNE] forment un groupe d'oiseaux très [VOLAGE]." }
+            bank: [
+                "LION", "TIGRE", "LOUP", "OURS", "ZEBRE", "SINGE", "PANTHERE", "GIRAFE", "CHIEN", "CHAT", 
+                "LAPIN", "POISSON", "OISEAU", "HAMSTER", "SOURIS", "TORTUE", "AIGLE", "FAUCON", "HIBOU", "BUSE", 
+                "MERLE", "MESANGE", "CORBEAU", "CIGOGNE", "RENARD", "CERF", "BALEINE", "DAUPHIN", "REQUIN", "ORQUE", 
+                "MEDUSE", "POULPE", "CRABE", "HOMARD", "CREVETTE", "ETOILE", "PHOQUE", "OTARIE", "MORSE", "MANCHOT", 
+                "PINGOUIN", "ELEPHANT", "RHINOCEROS", "HIPPOPOTAME", "BUFFLE", "ANTILOPE", "GAZELLE", "HYENE", "GUEPARD", "LEOPARD", 
+                "JAGUAR", "KANGOUROU", "KOALA", "WOMBAT", "ECHIDNE", "ORNYTHORINQUE", "CASTOR", "ECUREUIL", "HERISSON", "TAUPE", 
+                "BLAIREAU", "PUTOIS", "FURET", "VISON", "MARTRE", "LOIR", "MULOT", "RAT", "GERBILLE", "COBAYE", 
+                "CHINCHILLA", "IGUANE", "SERPENT", "VIPERE", "COBRA", "PYTHON", "BOA", "ANACONDA", "CROCODILE", "ALLIGATOR", 
+                "CAIMAN", "GAVIAL", "VARAN", "CHAMELEON", "GEKKO", "GRENOUILLE", "CRAPAUD", "TRITON", "SALAMANDRE", "AXOLOTL", 
+                "ABEILLE", "GUEPE", "FRELON", "BOURDON", "FOURMI", "TERMITE", "PAPILLON", "LIBELLULE", "MOUSTIQUE", "MOUCHE", 
+                "TAON", "PUCE", "POUX", "TIQUE", "ARAIGNEE", "SCORPION", "CENTIPEDE", "MILLE", "PATTE", "ESCARGOT", 
+                "LIMACE", "HUITRE", "MOULE", "PALOURDE", "COQUILLAGE", "CORAIL", "EPONGE", "ANEMONE", "OURSIN", "CONCOMBRE", 
+                "MER", "CHEME", "VACHE", "TAUREAU", "VEAU", "COCHON", "PORC", "TRUIE", "MOUTON", "BREBIS", 
+                "AGNEAU", "CHEVRE", "BOUC", "CHEVREAU", "CHEVAL", "JUMENT", "POULAIN", "PONEI", "ANE", "MULE", 
+                "MULET", "COCHON", "INDE", "LAPIN", "CANARD", "OIE", "CYGNE", "PINTADE", "DINDE", "DINDON", 
+                "POULE", "COQ", "POUSSIN", "CAAILLE", "FAISAN", "PERDRIX", "COLOMBE", "PIGEON", "TOURTERELLE", "PERROQUET", 
+                "PERRUCHE", "CACATOES", "ARAS", "TOUCAN", "COLIBRI", "MESANGE", "ROUGE", "GORGE", "MERLE", "ETOURNEAU", 
+                "PIE", "GEAI", "CORNEILLE", "GRAND", "DUC", "EFFRAIE", "CHOUETTE", "VAUTOUR", "CONDOR", "GYPAETE", 
+                "ALBATROS", "GOELAND", "MOUETTE", "PELICAN", "CORMORAN", "HERON", "CIGOGNE", "FLAMANT", "ROSE", "IBIS", 
+                "SPATULE", "AUTRUCHE", "EMU", "NANDOU", "KIWI", "CASCA", "BISON", "ORIGNAL", "ELAN", "CARIBOU", 
+                "RENE", "CHAMOIS", "ISARD", "MOUFLON", "BOUQUETIN", "MARMOTTE", "CHINCHILLA", "PANGOLIN", "AARDVARK", "TATOU", 
+                "PARESSEUX", "LEMURIEN", "TARSIER", "MACAQUE", "BABOUIN", "CHIMPANZE", "GORILLE", "ORANG", "OUTANG", "GIBBON", 
+                "MANDRILL", "CAPUCIN", "SAIMIRI", "HURLEUR", "TAMARIN", "OUISTITI", "FENNEC", "RATON", "LAVEUR", "COATI", 
+                "POULS", "VACHE", "TAUREAU", "BALEINE", "REQUIN", "OURS", "LOUP", "CHIEN", "CHAT", "RENARD", 
+                "TAUPE", "PUMA", "LYNX", "OCELOT", "SERVAL", "CARACAL", "SERPENT", "TORTUE", "CRABE", "HOMARD"
             ]
         },
         histoire: { 
             name: "Histoire", 
-            bank: ["ROI", "PAIX", "ARME", "SIEGE", "DATE", "FORT", "TRONE", "EPEE", "GAUL", "CLOVIS", "REIMS", "BATAILLE", "PEUPLE", "UNITE", "COURONNE", "SCEAU", "BLASON", "TOUR"],
-            mysteries: [
-                { word: "EMPIRE", hint: "Après qu'un grand [ROI] a brandi son [ARME] et mené un long [SIEGE] autour d'un [FORT], la [PAIX] est enfin proclamée à une [DATE] historique pour fonder un nouvel [EMPIRE]." },
-                { word: "ROYAUME", hint: "Sous l'impulsion du souverain [CLOVIS] victorieux lors d'une [BATAILLE] décisive, le [PEUPLE] gaulois trouve son [UNITE] sacrée à [REIMS] pour bâtir un nouveau [ROYAUME]." }
+            bank: [
+                "ROI", "PAIX", "ARME", "SIEGE", "DATE", "FORT", "TRONE", "EPEE", "GAUL", "CLOVIS", 
+                "REIMS", "BATAILLE", "PEUPLE", "UNITE", "COURONNE", "SCEAU", "BLASON", "TOUR", "EMPIRE", "ROYAUME", 
+                "CHEVALIER", "CHATEAU", "DONJON", "PONTA", "DRAWBRIDGE", "BLASON", "HERAUT", "TOURNOI", "JOUTE", "ARMURE", 
+                "HEAUME", "BOUCLIER", "LANCE", "MASSE", "HAUBERT", "ECUYER", "FIEF", "SEIGNEUR", "VASSAL", "SERF", 
+                "VILLAGE", "ABBAYE", "MONASTERE", "MOINE", "COPISTE", "PARCHEMENT", "PLUME", "ENCRE", "CROISADE", "TEMPLIER", 
+                "HOSPITALIER", "SALADIN", "JERUSALEM", "CONSTANTINOPLE", "BYZANCE", "ROME", "CESAR", "EMPEREUR", "SENAT", "LEGION", 
+                "CENTURION", "GLADIATEUR", "ARENE", "COLISEE", "CIRQUE", "CHAR", "SPARTACUS", "NEORON", "AUGUSTE", "TRAJAN", 
+                "HADRIEN", "CONSTANTIN", "CHARLEMAGNE", "AIX", "LA", "CHAPELLE", "ROLAND", "RONCEVAUX", "CAPET", "VALOIS", 
+                "BOURBON", "LOUIS", "QUATORZE", "VERSAILLES", "SOLEIL", "RICHELIEU", "MAZARIN", "COLBERT", "NAPOLEON", "BONAPARTE", 
+                "WATERLOO", "AUSTERLITZ", "MARENGO", "AIGLE", "GRANDE", "ARMEE", "MARECHAL", "GENERAL", "SOLDAT", "GROGNARD", 
+                "REVOLUTION", "BASTILLE", "GUILLOTINE", "TERREUR", "ROBESPIERRE", "DANTON", "MARAT", "CITOYEN", "COMMUNE", "PARIS", 
+                "GARRISON", "VERSAILLES", "VERDUN", "SOMME", "TRANCHEE", "POILU", "ARMISTICE", "CLEMENCEAU", "FOCH", "GAULLE", 
+                "RESISTANCE", "MAQUIS", "DEBARQUEMENT", "NORMANDIE", "PROVENCE", "LIBERATION", "BERLIN", "MUR", "GUERRE", "FROIDE", 
+                "O.N.U.", "TRAITE", "ALLIANCE", "COALITION", "CONGRESS", "MINISTRE", "DIPLOMATE", "AMBASSADEUR", "PACTES", "EDICT", 
+                "CHARTE", "CONSTITUTION", "REPUBLIQUE", "MONARCHIE", "TYRANNIE", "DEMOCRATIE", "OLIGARCHIE", "FEODALITE", "PAYSAN", "BOURGEOIS", 
+                "NOBLESSE", "CLERGE", "ETATS", "GENERAUX", "ASSEMBLEE", "DEPUTE", "SENATEUR", "VOTE", "SCRUTIN", "LOI", 
+                "JUSTICE", "TRIBUNAL", "PRISON", "BASTILLE", "CONCIERGERIE", "EXIL", "DEPORTATION", "COLONIE", "EMPIRE", "METROPOLE", 
+                "EXPLORATEUR", "NAVIGATEUR", "CARAVELLE", "GALION", "COMPAS", "ASTROLABE", "CARTE", "NOUVELLE", "MONDE", "AMERIQUE", 
+                "INDES", "EPICES", "SOIE", "ROUTE", "MARCO", "POLO", "COLOMB", "MAGELLAN", "VERRAZANO", "CARTIER", 
+                "CHAMPLAIN", "MONTCALM", "WOLFE", "QUEBEC", "ACADIE", "NOUVELLE", "FRANCE", "LOUISIANE", "TTAHITI", "AFRIQUE", 
+                "ASIE", "OCEANIE", "ANTARCTIQUE", "ARCTIQUE", "POLE", "EXPEDITION", "MISSION", "HAUTE", "FONCTION", "TRESOR", 
+                "ARCHIVES", "MANUSCRIT", "HISTOIRE", "PASSE", "ANTIQUITE", "MOYEN", "AGE", "RENAISSANCE", "LUMIERE", "EPOQUE", 
+                "SIECLE", "MILLENAIRE", "CHRONOLOGIE", "ARCHEOLOGIE", "FOUILLE", "RUINE", "SITE", "VESTIGE", "FOSSILE", "PREHISTOIRE"
             ]
         },
         litterature: { 
             name: "Littérature", 
-            bank: ["LIVRE", "PAGE", "PROSE", "RECIT", "TOME", "AUTEUR", "MOT", "PLUME", "POETE", "VERS", "RHYME", "STROPHE", "ENCRE", "LIRIQUE", "TEXTE", "CONTE", "NOUVELLE"],
-            mysteries: [
-                { word: "ROMAN", hint: "Dans ce [LIVRE] passionnant, chaque [PAGE] de [PROSE], chaque [RECIT] et chaque [TOME] rédigé par l'[AUTEUR] avec sa [PLUME] choisit le [MOT] juste pour bâtir un grand [ROMAN]." },
-                { word: "POESIE", hint: "Inspiré par la muse, le [POETE] trempe sa [PLUME] dans l'[ENCRE] pour composer un [VERS], structurer chaque [STROPHE] de son [TEXTE] et exprimer tout son art de la [POESIE]." }
+            bank: [
+                "LIVRE", "PAGE", "PROSE", "RECIT", "TOME", "AUTEUR", "MOT", "PLUME", "POETE", "VERS", 
+                "RHYME", "STROPHE", "ENCRE", "LIRIQUE", "TEXTE", "CONTE", "NOUVELLE", "ROMAN", "POESIE", "ESSAI", 
+                "BIOGRAPHIE", "AUTOBIOGRAPHIE", "MEMOIRES", "JOURNAL", "CORRESPONDANCE", "EPISTOLAIRE", "DRAME", "COMEDIE", "TRAGEDIE", "FARCE", 
+                "MELODRAME", "VAUDEVILLE", "FABLE", "MYTHE", "LEGENDE", "SAGE", "EPICO", "EPOPÉE", "BALLADE", "SONNET", 
+                "ODE", "ELEGISE", "SATIRE", "PANFLET", "MANIFESTE", "PREFACE", "POSTFACE", "CHAPITRE", "SECTION", "PARAGRAPHE", 
+                "LIGNE", "ALINEA", "PONCTUATION", "VIRGULE", "POINT", "EXCLAMATION", "INTERROGATION", "PARENTHESE", "GUILLEMET", "TIRET", 
+                "VOCABULAIRE", "LEXIQUE", "DICTIONNAIRE", "ENCYCLOPEDIE", "GRAMMAIRE", "SYNTAXE", "ORTHOGRAPHE", "ACCENT", "CEDILLE", "STYLE", 
+                "FIGURE", "METAPHORE", "COMPARISON", "ALLEGORIE", "OXYMORE", "ANAPHORE", "HYPERBOLE", "LITOTE", "EUPHEMISME", "IRONIE", 
+                "HUMOUR", "SATIRE", "PARODIE", "PASTICHE", "CITATION", "EXERGUE", "THEME", "INTRIGUE", "PERSONNAGE", "HEROS", 
+                "ANTAGONISTE", "PROTAGONISTE", "NARRATEUR", "AUTEUR", "LECTEUR", "PUBLIC", "CRITIQUE", "EDITEUR", "LIBRAIRE", "BIBLIOTHEQUE", 
+                "MANUSCRIT", "INCUNABLE", "PARCHEMENT", "PAPIER", "RELIEURE", "COUVERTURE", "DOS", "TRANCHE", "MARQUE", "PAGE", 
+                "LIBRAIRIE", "ROMANCIER", "NOVELLISTE", "DRAMATURGE", "ESSAYISTE", "PHILOSOPHE", "MORALISTE", "EPIGRAMME", "APHORISME", "MAXIME", 
+                "PROVERBE", "DICTION", "ORATEUR", "DISCOURS", "RHETORIQUE", "ELOQUENCE", "STYLE", "ROMANTISME", "REALISME", "NATURALISME", 
+                "SYMBOLISME", "SURREALISME", "CLASSICISME", "HUMANISME", "LUMIERE", "EXISTENTIALISME", "ABSURDE", "NOUVEAU", "ROMAN", "OUVRAGE", 
+                "TRADUCTION", "VERSION", "THEME", "POLYGLOTTE", "LANGUE", "IDIOME", "DIALECTE", "PATOIS", "SLANG", "ARGOT", 
+                "VERNACULAIRE", "LINGUISTIQUE", "SEMIOTIQUE", "SEMANTIQUE", "ETYMOLOGIE", "PHILOLOGIE", "LITTORATURE", "ECRIVAIN", "PLAGIAT", "INSPIRATION", 
+                "IMAGINATION", "CREATION", "FICTION", "REALITE", "VERITE", "MENSONGE", "ILLUSION", "FANTASTIQUE", "MERVEILLEUX", "SCIENCE", 
+                "FICTION", "POLICIER", "THRILLER", "SUSPENSE", "AVENTURE", "HISTORIQUE", "PSYCHOLOGIQUE", "SOCIAL", "TERREUR", "HORREUR", 
+                "POUET", "CHANSON", "CHANT", "TROUBADOUR", "TROUVERE", "JONGLEUR", "MINNESINGER", "RIME", "VERSE", "PROSODIE", 
+                "SCAN", "CESURE", "HEPTASYLLABE", "OCTOSYLLABE", "ALEXANDRIN", "DECASYLLABE", "HEMISTICHE", "ENJAMBEMENT", "JET", "CONTES", 
+                "FABLES", "LA FONTAINE", "MOLIERE", "CORNEILLE", "RACINE", "VOLTAIRE", "ROUSSEAU", "DIDEROT", "HUGO", "BALZAC", 
+                "FLAUBERT", "ZOLA", "PROUST", "CAMUS", "SARTRE", "SENEQUE", "CICERON", "VIRGILE", "HOMERE", "PLATON"
             ]
         },
         theatre: { 
             name: "Théâtre", 
-            bank: ["SCENE", "ACTEUR", "ROLE", "TEXTE", "DECOR", "SALLE", "DRAME", "ARTISTE", "COMEDIE", "RIRE", "MASQUE", "SALVE", "JOIE", "TROUPE", "PLANCHE", "THEATRE"],
-            mysteries: [
-                { word: "RIDEAU", hint: "Sur la grande [SCENE], l'[ACTEUR] et l'[ARTISTE] incarnent leur [ROLE] avec un [TEXTE] percutant, devant un [DECOR] somptueux sous les applaudissements d'une [SALLE] avant que ne tombe le [RIDEAU]." },
-                { word: "SUCCES", hint: "Portée par une [TROUPE] dynamique sur les [PLANCHE]s de la [SCENE], cette [COMEDIE] hilarante déclenche le [RIRE] général derrière son [MASQUE] avant d'obtenir un franc [SUCCES]." }
+            bank: [
+                "SCENE", "ACTEUR", "ROLE", "TEXTE", "DECOR", "SALLE", "DRAME", "ARTISTE", "COMEDIE", "RIRE", 
+                "MASQUE", "SALVE", "JOIE", "TROUPE", "PLANCHE", "THEATRE", "TRAGEDIE", "FARCE", "MELODRAME", "VAUDOU", 
+                "MONOLOGUE", "DIALOGUE", "REPLIQUE", "ASPECT", "MISE", "EN", "SCENE", "REGISSEUR", "METTEUR", "EN", 
+                "SCENE", "COSTUME", "MAQUILLAGE", "PERRUQUE", "ACCESSOIRE", "LUMIERE", "SPOT", "GRADIN", "FAUTEUIL", "ORCHESTRE", 
+                "BALCON", "LOGE", "COULISSE", "SCENOGRAPHIE", "ENTRACTE", "APPLAUDISSEMENT", "OVATION", "RIDEAU", "REGIE", "SOUFFLEUR", 
+                "IMPROVISATION", "REPETITION", "GENERAL", "AUDITION", "CASTING", "BOUFFON", "ARLEQUIN", "PULCINELLA", "PANTALON", "PIERROT", 
+                "COLOMBINE", "SCAPIN", "TARTUFFE", "FIGARO", "DON", "JUAN", "CYRANO", "ALCESTE", "HARPAGON", "PHEDRE", 
+                "HERMIONE", "ANTIGONE", "HAMLET", "MACBETH", "OTHELLO", "LEAR", "ROME", "JULIETTE", "MOLIERE", "SHAKESPEARE", 
+                "RACINE", "CORNEILLE", "MARIVAUX", "BEAUMARCHAIS", "BOULEVARD", "ABSURDE", "BECKETT", "IONESCO", "GENET", "PINTER", 
+                "COCTEAU", "ANOUILH", "GIRAUDOUX", "SARTRE", "CAMUS", "FEYDEAU", "LABICHE", "COURTELINE", "MARIVAUDAGE", "TRAGEDIEN", 
+                "COMEDIEN", "MIME", "CLOWN", "ACROBATE", "DANSEUR", "CHORÉGRAPHE", "MUSICIEN", "CHEF", "D", "ORCHESTRE", 
+                "CHANT", "OPERETTE", "OPERA", "LIBRATTO", "COMPOSITEUR", "PARTITION", "ARIA", "DUO", "CHOEUR", "SOLISTE", 
+                "BALLET", "PAS", "DE", "DEUX", "TUTU", "CHAUSSON", "POINTES", "SCENE", "PLATEAU", "RAMPE", "PROSCENIUM", 
+                "JARDIN", "COUR", "FOND", "CADRE", "ITALIEN", "ELIZABETHAIN", "ARENE", "RUE", "CIRQUE", "CABARET", 
+                "REVUE", "MUSIC", "HALL", "STAND", "UP", "ONE", "MAN", "SHOW", "SKETCH", "IMPRO", "MATCH", 
+                "CONCOURS", "FESTIVAL", "AVIGNON", "EDIMBOURG", "BROADWAY", "WEST", "END", "BOUFFE", "BOUFFONNERIE", "SOTIE", 
+                "MYSTERE", "MIRACLE", "PASSION", "MORALITE", "AUTO", "SACRAMENTAL", "COMMEDIA", "DELL", "ARTE", "ZIBELLINO", 
+                "BATON", "SLAPSTICK", "BURLESQUE", "GROTESQUE", "PATHOS", "CATHARSIS", "HYPOCRISIE", "QUINTESSENCE", "INTONATION", "DICTION", 
+                "PROJECTION", "SILENCE", "JEU", "REGARD", "MOUVEMENT", "POSTURE", "CORPS", "VOIX", "SOUFFLE", "EMOTION", 
+                "LARME", "SMILE", "GRIMACE", "GESTICULATION", "PANTOMIME", "EXPRESSION", "TENSION", "DENOUEMENT", "CLIMAX", "INTRIGUE"
             ]
         },
         danse: { 
             name: "Danse", 
-            bank: ["BAL", "PAS", "TANGO", "VALSE", "SALSA", "CORPS", "RYTHME", "DANSE", "GESTES", "CLUB", "PISTE", "SHOW", "MOUVEMENT"],
-            mysteries: [
-                { word: "BALLET", hint: "Pour préparer le grand [BAL], chaque [PAS] précis de [TANGO], de [VALSE] ou de [SALSA] exécuté par la [DANSE] demande au [CORPS] de suivre le parfait [BALLET]." },
-                { word: "CADENCE", hint: "Sur la [PISTE] illuminée du [CLUB], chaque [DANSE] enflammée et chaque [GESTES] en harmonie avec le [RYTHME] entraînent les danseurs dans une folle [CADENCE]." }
+            bank: [
+                "BAL", "PAS", "TANGO", "VALSE", "SALSA", "CORPS", "RYTHME", "DANSE", "GESTES", "CLUB", 
+                "PISTE", "SHOW", "MOUVEMENT", "BALLET", "CADENCE", "CHA", "CHA", "CHA", "RUMBA", "SAMBA", 
+                "ROCK", "SWING", "CHARLESTON", "FOXTROT", "QUICKSTEP", "PASO", "DOBLE", "BOLERO", "BACHATA", "KIZOMBA", 
+                "ZOUK", "REGGAETON", "HIP", "HOP", "BREAKDANCE", "POPING", "LOCKING", "KRUMP", "VOGUING", "WAACKING", 
+                "CONTEMPORAIN", "CLASSIQUE", "MODERN", "JAZZ", "CLAD", "TAP", "CLAQUETTE", "FLAMENCO", "SEVILLANAS", "CUECA", 
+                "FANDANGO", "TARANTELLA", "MAZURKA", "POLKA", "GALOP", "COTILLON", "CONTREDANSE", "CARRERE", "MENUET", "SARABANDE", 
+                "BOURREE", "PAVANE", "GIGUE", "REEL", "STRATHSPEY", "POLONAISE", "CSARDAS", "HAWAIIENNE", "HULA", "ORI", 
+                "TAHITIANA", "BHARATANATYAM", "KATHAK", "KATHAKALI", "ODISSI", "MANIPURI", "BHANGRA", "BOLLYWOOD", "BELLY", "DANCE", 
+                "DANSE", "VENTRE", "ORIENTALE", "AFRICAINE", "DJEMBE", "CAPOEIRA", "HAKA", "MAORI", "FOLKLORE", "TRADITION", 
+                "CHORÉGRAPHIE", "CHOREGRAPHE", "DANSEUR", "DANSEUSE", "SOLISTE", "CORPS", "DE", "BALLET", "ETOILE", "PREMIER", 
+                "DANSEUR", "SUJET", "CORYPHEE", "QUADRILLE", "MAITRE", "BALLET", "SALLE", "STUDIO", "BARRE", "MIROIR", 
+                "PARQUET", "CHausson", "DEMI", "POINTE", "POINTE", "TUTU", "ROBE", "FRAC", "JUSTO", "CORPS", 
+                "COLLANT", "JAMBIERE", "CHAUFFAGE", "ECHAUFFEMENT", "ETIREMENT", "BARRE", "GRAND", "PLIE", "DEMI", "PLIE", 
+                "BATEMENT", "RONDE", "JAMBE", "ADAGE", "ALLEGRO", "TOUR", "SAUT", "ENTRCHAT", "CABRIOLE", "PIROUETTE", 
+                "FOUETTE", "ASSEMBLE", "JET", "GLISSADE", "BALANCE", "CHASSE", "PAS", "DE", "BOURREE", "BALLON", 
+                "ELEVATION", "PORT", "BRAS", "ADAGIO", "VIRTUOSITE", "GRACE", "LEGERETE", "HARMONIE", "ENERGIE", "PUISSANCE", 
+                "FLUIDITE", "TENSION", "RELÂCHEMENT", "IMPROVISATION", "FREE", "STYLE", "BATTLE", "JAM", "CYPHER", "CREW", 
+                "CONCOURS", "SCENE", "SPECTACLE", "FESTIVAL", "OPERA", "THEATRE", "CABARET", "MUSIC", "HALL", "DISCO", 
+                "CLUBBING", "BOITE", "NUIT", "FIESTA", "FETE", "SOIREE", "RAVE", "ELECTRO", "TECHNO", "HOUSE", 
+                "TRANCE", "DUBSTEP", "AMBIENT", "FUNK", "SOUL", "RNB", "REGGAE", "SKA", "PUNK", "METAL"
             ]
         },
         sport: { 
             name: "Sport", 
-            bank: ["BALLON", "COURIR", "MATCH", "SCORE", "EQUIPE", "JEU", "CHAMP", "PISTE", "COURSE", "LIGNE", "CHRONO", "EFFORT", "PODIUM", "MEDAILLE", "SPORT"],
-            mysteries: [
-                { word: "VICTOIRE", hint: "Durant ce [MATCH] intense sur le [CHAMP] de course, l'[EQUIPE] doit [COURIR] et manier le [BALLON] avec brio pour améliorer le [SCORE], remporter le [JEU] et décrocher la belle [VICTOIRE]." },
-                { word: "CHAMPION", hint: "Après un rude [EFFORT] sur la [PISTE] le long de la [LIGNE] droite, le chronomètre valide la performance de l'athlète qui monte sur le [PODIUM] pour brandir sa [MEDAILLE] en digne [CHAMPION]." }
+            bank: [
+                "BALLON", "COURIR", "MATCH", "SCORE", "EQUIPE", "JEU", "CHAMP", "PISTE", "COURSE", "LIGNE", 
+                "CHRONO", "EFFORT", "PODIUM", "MEDAILLE", "SPORT", "VICTOIRE", "CHAMPION", "ATHLETE", "ENTRAINEUR", "COACH", 
+                "ARBITRE", "STADE", "ARENE", "GYMNASE", "TERRAIN", "BASSIN", "RING", "TATAMI", "VELODROME", "CIRCUIT", 
+                "TENNIS", "BASKET", "FOOTBALL", "RUGBY", "HANDBALL", "VOLLEYBALL", "BASKETBALL", "WATERPOLO", "HOCKEY", "CRICKET", 
+                "BASEBALL", "SOFTBALL", "GOLF", "ATHLETISME", "NATATION", "PLONGEE", "GYMNASTIQUE", "ESCRIME", "BOXE", "JUDO", 
+                "KARATE", "TAEKWONDO", "LUTTE", "AIKIDO", "KUNG", "FU", "CYCLISME", "TRIATHLON", "MARATHON", "SPRINT", 
+                "HAIE", "PERCHE", "LONGUEUR", "HAUTEUR", "POIDS", "DISQUE", "JAVELOT", "MARTEAU", "DECATHLON", "HEPTATHLON", 
+                "PATINAGE", "SKI", "SNOWBOARD", "LUGE", "BOBSLEIGH", "BIATHLON", "CURLING", "HOCKEY", "SURF", "VOILE", 
+                "AVIRON", "CANOE", "KAYAK", "SURF", "KITE", "SURF", "PLANCHE", "VOILE", "ESCALADE", "ALPINISME", 
+                "RANDONNEE", "TREKKING", "TIR", "ARC", "BALLE", "FUSIL", "EQUITATION", "POLO", "PATIN", "ROULETTE", 
+                "SKATEBOARD", "TROT", "TENNIS", "TABLE", "BADMINTON", "SQUASH", "PADEL", "PELOTE", "BOULE", "PETANQUE", 
+                "BILLARD", "BOWLING", "FLÉCHETTE", "ESCALADE", "CROSSFIT", "MUSCULATION", "FITNESS", "YOGA", "PILATES", "STRETCHING", 
+                "BOXE", "THAI", "KICK", "BOXE", "SAVATE", "MMA", "VALE", "TUDO", "ULTIMATE", "FRISBEE", 
+                "QUIDDITCH", "CHEERLEADING", "DANSE", "SPORTIVE", "GYM", "RYTHMIQUE", "TRAMPOLINE", "PLONGE", "HAUT", "VOL", 
+                "WATER", "POLO", "REGATE", "AMERICAIN", "GRIDIRON", "LACROSSE", "HURDLING", "STEEPLE", "CHASE", "PENTATHLON", 
+                "TRIATHLON", "IRONMAN", "ULTRA", "TRAIL", "RALLYE", "FORMULE", "UN", "KARTING", "MOTO", "GP", 
+                "ENDURANCE", "24", "HEURES", "LE", "MANS", "BOXE", "SAVATE", "ESCRIME", "FLEURET", "EPEE", "SABRE", 
+                "JUDOKA", "KARATEX", "BLACK", "BELT", "TATAMI", "DOJO", "RING", "CORDE", "GANT", "PROTEGER", 
+                "CASQUE", "MAILLOT", "SHORT", "CHAUSSURE", "POINT", "MANCHE", "QUART", "TEMPS", "PROLONGATION", "TIR"
             ]
         },
         football: { 
             name: "Football", 
-            bank: ["BUT", "STADE", "ARBITRE", "TACLE", "MATCH", "JOUEUR", "FAUTE", "BALLON", "MAILLOT", "PASS", "TIR", "GARDIEN", "LIGNE", "COACH", "CLUB"],
-            mysteries: [
-                { word: "TROPHEE", hint: "Sur la pelouse pleine du [STADE], l'[ARBITRE] siffle immédiatement la [FAUTE], tandis que le [JOUEUR] évite habilement le [TACLE] pour propulser le [BALLON] au fond du [BUT] lors de ce [MATCH] décisif pour le [TROPHEE]." },
-                { word: "VICTOIRE", hint: "Sous l'œil attentif du [COACH], l'[EQUIPE] vêtue de son [MAILLOT] enchaîne les [PASS] et un [TIR] puissant que le [GARDIEN] repousse sur sa [LIGNE] pour offrir au [CLUB] une éclatante [VICTOIRE]." }
+            bank: [
+                "BUT", "STADE", "ARBITRE", "TACLE", "MATCH", "JOUEUR", "FAUTE", "BALLON", "MAILLOT", "PASS", 
+                "TIR", "GARDIEN", "LIGNE", "COACH", "CLUB", "TROPHEE", "VICTOIRE", "EQUIPE", "PELOUSE", "BORDURE", 
+                "CAGE", "FILET", "PIQUET", "CORNER", "TOUCHE", "CENTRE", "SURFACE", "REPARATION", "PENALTY", "COUP", 
+                "FRANC", "MUR", "CARTON", "JAUNE", "ROUGE", "EXPULSION", "AVERTISSEMENT", "OFF", "SIDE", "HORS", 
+                "JEU", "ATTAQUANT", "DEFENSEUR", "MILIEU", "ATTAQUE", "DEFENSE", "CAPITAINE", "REMPLACANT", "BANC", "BORD", 
+                "TERRAIN", "FEU", "DE", "GAON", "CHAMPIONNAT", "COUPE", "MONDE", "EURO", "LIGUE", "CHAMPIONS", 
+                "EUROPA", "SUPER", "BALLON", "D", "OR", "MERCATO", "TRANSFERT", "CONTRAT", "STRIKER", "GOAL", "KEEPER", 
+                "DEFENDER", "MIDFIELDER", "WINGER", "LIBERO", "STOPER", "PIVOT", "EXTRÊME", "LATERAL", "RETRO", "PASSE", 
+                "DOUBLE", "CONTACT", "CONTRE", "ATTAQUE", "PRESSING", "BLOC", "AUT", "GOAL", "CSC", "LOB", 
+                "VOLEE", "DEMI", "BIC", "RETOURNADE", "ACROBATIE", "PLONGEON", "PARADE", "MAIN", "GANTS", "CRAMPON", 
+                "PROTÈGE", "TIBIAS", "BAS", "SHORT", "CAPITAINE", "BRACELET", "FANION", "ETAT", "MAJOR", "PRESIDENT", 
+                "SUPPORTER", "ULTRA", "TIFOSI", "KOP", "VIRAGE", "STADE", "ENCEINTE", "GUICHET", "BILLET", "ABONNEMENT", 
+                "PARC", "PRINCES", "VELODROME", "WANDA", "METROPOLITANO", "CAMP", "NOU", "BERNABEU", "OLD", "TRAFFORD", 
+                "ANFIELD", "WEMBLEY", "SAN", "SIRO", "ALLIANZ", "ARENA", "SIGNAL", "IDUNA", "PARK", "DRAGAO", 
+                "JOSE", "ALVALADE", "DA", "LUZ", "ESTADIO", "NACIONAL", "MARACANA", "MONUMENTAL", "LA", "BOMBONERA", "CENTENARIO", 
+                "AZTECA", "METLIFE", "ROSE", "BOWL", "COMM", "COMM", "COMMISSION", "DISCIPLINAIRE", "VAR", "VIDEO", 
+                "ASSISTANCE", "ARBITRAGE", "RALENTI", "VISIONNAGE", "MONITEUR", "OR", "VICTOIRE", "DEFAITE", "MATCH", "NUL", 
+                "PROLONGATIONS", "TIRS", "AU", "BUT", "SEANCE", "TENSION", "EXPLOSION", "JOIE", "TROPHEE", "COUPE", 
+                "MEDAILLE", "PODIUM", "TOUR", "HONNEUR", "FOULARD", "DRAPEAU", "HYMNE", "NATIONAL", "COUP", "ENVOI"
             ]
         },
         informatique: { 
             name: "Informatique", 
-            bank: ["CODE", "BUG", "LIGNE", "DATA", "RESEAU", "WEB", "CLIC", "ECRAN", "CLAVIER", "SOURIS", "PROG", "INDEX", "CLOUD", "SERVEUR", "SITE", "LIEN", "HACK"],
-            mysteries: [
-                { word: "LOGICIEL", hint: "En écrivant ce [CODE] informatique, le développeur analyse chaque [DATA] circulant sur le [RESEAU], corrige un [BUG] [LIGNE] après [LIGNE] sur son [ECRAN] d'un simple [CLIC] pour faire tourner le parfait [LOGICIEL]." },
-                { word: "INTERNET", hint: "Grâce à son [CLAVIER], sa [SOURIS] et un bon [LIEN] hébergé sur un [SERVEUR] distant dans le [CLOUD], l'expert met en ligne son [SITE] à destination de tout le réseau [INTERNET]." }
+            bank: [
+                "CODE", "BUG", "LIGNE", "DATA", "RESEAU", "WEB", "CLIC", "ECRAN", "CLAVIER", "SOURIS", 
+                "PROG", "INDEX", "CLOUD", "SERVEUR", "SITE", "LIEN", "HACK", "LOGICIEL", "INTERNET", "PROGRAMME", 
+                "ALGORITHME", "FONCTION", "VARIABLE", "CONSTANTE", "TABLEAU", "OBJET", "CLASSE", "METHODE", "BOUCLE", "CONDITION", 
+                "TEST", "DEBUG", "COMPILATEUR", "INTERPRETE", "SOURCE", "BINAIRE", "OCTET", "BIT", "MEGA", "GIGA", 
+                "TERA", "PETA", "PROCESSEUR", "MEMOIRE", "RAM", "DISQUE", "DUR", "SSD", "CARTE", "MERE", 
+                "CARTE", "GRAPHIQUE", "GPU", "CPU", "ALIMENTATION", "BOITIER", "VENTILATEUR", "CLAVIER", "TACTILE", "ECRAN", 
+                "RETINA", "MONITEUR", "IMPRIMANTE", "SCANNER", "ROUTEUR", "SWITCH", "MODEM", "FIBRE", "OPTIQUE", "WIFI", 
+                "BLUETOOTH", "ETHERNET", "PORT", "USB", "HDMI", "VGA", "JACK", "BASE", "DONNEES", "SQL", 
+                "MYSQL", "MONGODB", "POSTGRES", "ORACLE", "FIREBASE", "API", "REST", "JSON", "XML", "HTML", 
+                "CSS", "JAVASCRIPT", "PYTHON", "JAVA", "C", "PLUS", "PHP", "RUBY", "SWIFT", "KOTLIN", 
+                "TYPESCRIPT", "REACT", "ANGULAR", "VUE", "NODE", "EXPRESS", "DJANGO", "FLASK", "LARAVEL", "SYMFONY", 
+                "GIT", "GITHUB", "GITLAB", "VERSION", "COMMIT", "PUSH", "PULL", "MERGE", "BRANCH", "REPO", 
+                "CONTAINER", "DOCKER", "KUBERNETES", "LINUX", "WINDOWS", "MACOS", "ANDROID", "IOS", "UNIX", "DEBIAN", 
+                "UBUNTU", "CENTOS", "FEDORA", "ARCH", "KALI", "SECURITE", "CYBER", "FIREWALL", "VPN", "SSL", 
+                "HTTPS", "CHIFFREMENT", "HASH", "SALT", "TOKEN", "JWT", "AUTHENTIFICATION", "AUTORISATION", "ADMIN", "ROOT", 
+                "PASSWORD", "LOGIN", "SESSION", "COOKIE", "CACHE", "PROXY", "DNS", "IP", "IPV4", "IPV6", 
+                "MAC", "ADRESSE", "HOST", "DOMAINE", "HEBERGEMENT", "DEPLOY", "PRODUCTION", "STAGING", "TESTING", "BACKUP", 
+                "RESTORE", "CRASH", "EXCEPTION", "ERREUR", "WARNING", "LOGS", "CONSOLE", "TERMINAL", "SHELL", "BASH", 
+                "POWERSHELL", "SCRIPT", "AUTOMATION", "BOT", "ARTIFICIELLE", "INTELLIGENCE", "MACHINE", "LEARNING", "DEEP", "NEURAL"
             ]
         },
         musique: { 
             name: "Musique", 
-            bank: ["NOTE", "RYTHME", "BASS", "VOIX", "CD", "SON", "OPERA", "PIANO", "GUITARE", "CORDE", "ACCORD", "CHANT", "SCENE", "MICRO", "ROCK", "SALLE"],
-            mysteries: [
-                { word: "MELODIE", hint: "Une simple [NOTE] jouée au [PIANO] et un bon [RYTHME] de [BASS], portés par la [VOIX] cristalline ou un beau [SON] d'[OPERA] enregistré sur un [CD], composent une magnifique [MELODIE]." },
-                { word: "CONCERT", hint: "Armé de sa [GUITARE] dont il pince chaque [CORDE] pour obtenir un bel [ACCORD], l'artiste s'avance vers le [MICRO] sur la [SCENE] de la [SALLE] pour entamer son grand [CONCERT]." }
+            bank: [
+                "NOTE", "RYTHME", "BASS", "VOIX", "CD", "SON", "OPERA", "PIANO", "GUITARE", "CORDE", 
+                "ACCORD", "CHANT", "SCENE", "MICRO", "ROCK", "SALLE", "MELODIE", "CONCERT", "PARTITION", "SOLFEGE", 
+                "PORTEE", "CLE", "SOL", "FA", "UT", "BLANCHE", "NOIRE", "CROCHE", "DOUBLE", "CROCHE", 
+                "PAUSE", "DEMI", "MESURE", "TEMPO", "METRONOME", "ALLEGRO", "ADAGIO", "PRESTO", "MODERATO", "ANDANTE", 
+                "VIOLIN", "VIOLON", "ALTO", "VIONCELLE", "CONTREBASSE", "HARPE", "LUTH", "BANJO", "UKULELE", "MANDOLINE", 
+                "FLUTE", "HAUT", "BOIS", "CLARINETTE", "SAXOPHONE", "TROMPETTE", "TROMBONE", "TUBA", "COR", "CLARINET", 
+                "BATTERIE", "CYMBALE", "TAMBOUR", "CAISSE", "CLAIRE", "GROSSE", "CAISSE", "TIMBALE", "XYLOPHONE", "MARIMBA", 
+                "VIBRAPHONE", "ACCORDEON", "ORGUE", "SYNTHETISEUR", "CLAVIER", "SAMPLEUR", "PLATINE", "VINYLE", "CASSETTE", "MP3", 
+                "STREAMING", "ALBUM", "EP", "SINGLE", "TITRE", "MORCEAU", "CHANSON", "PAROLE", "REFRAIN", "COUPLET", 
+                "PONT", "INTRO", "OUTRO", "SOLO", "IMPRO", "JAM", "SESSION", "ORCHESTRE", "PHILHARMONIQUE", "SYMPHONIE", 
+                "CONCERTO", "SONATE", "QUATUOR", "TRIO", "DUO", "CHOEUR", "CHORALE", "MAITRISE", "CHEF", "ORCHESTRE", 
+                "BATTEUR", "GUITARISTE", "PIANISTE", "VIOLONISTE", "CHANTEUR", "CHANTEUSE", "DIVA", "TENOR", "SOPRANO", "BARITON", 
+                "BASSE", "ALTO", "MEZZO", "FALSETTO", "VIBRATO", "ACCENT", "TIMBRE", "FREQUENCE", "DECIBEL", "VOLUME", 
+                "GAUCHE", "DROITE", "STEREO", "MONO", "MIX", "MASTERING", "STUDIO", "ENREGISTREMENT", "MICROPHONE", "CASQUE", 
+                "AMPLIFICATEUR", "ENCEINTE", "TABLE", "MIXAGE", "JACK", "XLR", "MIDI", "FREQUENCE", "ACCORDAGE", "DIAPASON", 
+                "BLUES", "JAZZ", "POP", "ROCK", "METAL", "PUNK", "REGGAE", "FUNK", "SOUL", "RNB", 
+                "RAP", "HIP", "HOP", "ELECTRONIQUE", "TECHNO", "HOUSE", "TRANCE", "AMBIENT", "CLASSIQUE", "BAROQUE", 
+                "CLASSIQUE", "ROMANTIQUE", "MODERN", "CONTEMPORAIN", "FOLK", "COUNTRY", "LATINO", "SALSA", "TANGO", "BOSSA"
             ]
         },
         cinema: { 
             name: "Cinéma", 
-            bank: ["FILM", "PLAN", "ACTEUR", "SCENE", "CADRE", "SALLE", "STAR", "BOITE", "DECOR", "DIRECTEUR", "GENRE", "ACTION", "COUP", "ECRAN", "BILLET"],
-            mysteries: [
-                { word: "CAMERA", hint: "Pour tourner ce magnifique [FILM], chaque [PLAN] et chaque [SCENE] demandent à l'[ACTEUR] principal et à la [STAR] de poser dans le bon [CADRE] devant l'objectif de la précieuse [CAMERA]." },
-                { word: "SCENARIO", hint: "Sous la direction du réalisateur qui crie l'[ACTION] après le [COUP] d'envoi, le tournage progresse plan par plan sous les yeux du public pour découvrir un nouveau [SCENARIO]." }
+            bank: [
+                "FILM", "PLAN", "ACTEUR", "SCENE", "CADRE", "SALLE", "STAR", "BOITE", "DECOR", "DIRECTEUR", 
+                "GENRE", "ACTION", "COUP", "ECRAN", "BILLET", "CAMERA", "SCENARIO", "REALISATEUR", "METTEUR", "EN", 
+                "SCENE", "PRODUCTOR", "PRODUCTEUR", "DISTRIBUTOR", "DISTRIBUTEUR", "CASTING", "AUDITION", "FIGURANT", "STUNT", "CASCADEUR", 
+                "DOUBLE", "MAQUILLAGE", "COSTUME", "EFFET", "SPECIAL", "NUMERIQUE", "CGI", "ANIMATION", "STOP", "MOTION", 
+                "LONG", "METRAGE", "COURT", "METRAGE", "MOYEN", "METRAGE", "DOCUMENTAIRE", "REPORTAGE", "FICTION", "ANIMATION", 
+                "COMEDIE", "DRAME", "THRILLER", "POLICIER", "HORREUR", "TERREUR", "FANTASTIQUE", "SCIENCE", "FICTION", "AVENTURE", 
+                "WESTERN", "PEPLUM", "HISTORIQUE", "BIOPIC", "ANIMATION", "MUSICAL", "ROMANCE", "NOIR", "EXPÉRIMENTAL", "AVANT", 
+                "GARDE", "BLOCKBUSTER", "INDIE", "AUTEUR", "CINE", "CLUB", "FESTIVAL", "CANNES", "VENISE", "BERLIN", 
+                "OSCAR", "CESAR", "GOLDEN", "GLOBE", "PALME", "OR", "LION", "OURS", "GRAND", "PRIX", 
+                "PROJECTION", "SEANCE", "AVANT", "PREMIERE", "TAPIS", "ROUGE", "MONITEUR", "CLAP", "BOITE", "PE", 
+                "PE", "PELLICULE", "BOBINE", "PROJECTIONS", "LANTERNE", "MAGIQUE", "FRERES", "LUMIERE", "MELIES", "GRIFFITH", 
+                "CHAPLIN", "KEATON", "LLOYD", "HITCHCOCK", "KUBRICK", "SPIELBERG", "SCORSESE", "TARANTINO", "NOLAN", "FINCHER", 
+                "VILLENEUVE", "CAMERON", "LINDCH", "GODARD", "TRUFFAUT", "RENOIR", "FELLINI", "VISCONTI", "BERGMAN", "AKIRO", 
+                "KUROSAWA", "MIYAZAKI", "OSAKA", "HOLLYWOOD", "BOLLYWOOD", "NOLLYWOOD", "STUDIO", "WARNER", "DISNEY", "PARAMOUNT", 
+                "UNIVERSAL", "COLUMBIA", "FOX", "METRO", "GOLDWYN", "MAYER", "PIXAR", "DREAMWORKS", "NETFLIX", "PRIME", 
+                "DISNEY", "PLUS", "HBO", "APPLE", "TV", "SALLE", "CINEMA", "FAUTEUIL", "POP", "CORN", 
+                "FRIANDISE", "ENTRACTE", "GENERIQUE", "DEBUT", "FIN", "GENERIQUE", "CREDITS", "STORYBOARD", "SCRIPT", "CONTINUITE", 
+                "CADREUR", "CHEF", "OPERATEUR", "LUMIERE", "ELECTRICIEN", "MAC", "MIXEUR", "MONTEUR", "MONTAGGE", "BOUT", "FICHE"
             ]
         }
     };
@@ -537,6 +736,8 @@
         const gameState = {
             currentThemeKey,
             currentThemeMystery: currentTheme.mystery,
+            currentThemeWords: currentTheme.words,
+            currentThemeHint: currentTheme.hint,
             gridData,
             placedWords,
             foundWordsCount,
@@ -553,15 +754,10 @@
         currentThemeKey = savedGame.currentThemeKey;
         const themeObj = themesData[currentThemeKey];
         
-        const mysteryObj = themeObj.mysteries.find(m => m.word === savedGame.currentThemeMystery) || themeObj.mysteries[0];
-        const matches = mysteryObj.hint.match(/\[(.*?)\]/g) || [];
-        let hintWords = matches.map(m => m.slice(1, -1));
-        let selectedWords = [...new Set(hintWords)].filter(w => w !== mysteryObj.word);
-
         currentTheme = {
-            words: selectedWords,
-            mystery: mysteryObj.word,
-            hint: mysteryObj.hint
+            words: savedGame.currentThemeWords,
+            mystery: savedGame.currentThemeMystery,
+            hint: savedGame.currentThemeHint
         };
         
         gridData = savedGame.gridData;
@@ -645,19 +841,31 @@
         }
     }
 
+    function shuffleArray(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
     function startGame(themeKey) {
         currentThemeKey = themeKey;
         const themeObj = themesData[themeKey];
         
-        const randMystery = themeObj.mysteries[Math.floor(Math.random() * themeObj.mysteries.length)];
-        const matches = randMystery.hint.match(/\[(.*?)\]/g) || [];
-        let hintWords = matches.map(m => m.slice(1, -1));
-        let selectedWords = [...new Set(hintWords)].filter(w => w !== randMystery.word);
+        // Sélection dynamique aléatoire depuis la banque de 300+ mots
+        let shuffledBank = shuffleArray(themeObj.bank.filter(w => w.length >= 3 && w.length <= 8));
+        
+        let mysteryWord = shuffledBank[0];
+        let subWords = shuffledBank.slice(1, 8); // 7 mots aléatoires pour la grille
+
+        let hintSentence = `Dans ce domaine, on retrouve souvent [${subWords[0]}], [${subWords[1]}], [${subWords[2]}], [${subWords[3]}], [${subWords[4]}], [${subWords[5]}] ainsi que [${subWords[6]}], menant tout droit vers le secret [${mysteryWord}].`;
 
         currentTheme = {
-            words: selectedWords,
-            mystery: randMystery.word,
-            hint: randMystery.hint
+            words: subWords,
+            mystery: mysteryWord,
+            hint: hintSentence
         };
 
         isGameFinished = false;
@@ -948,7 +1156,6 @@
 
     function giveUpMystery() {
         if (isGameFinished) return;
-        // Remplit le champ input avec le mot mystère et déclenche la validation complète
         document.getElementById('mystery-input').value = currentTheme.mystery;
         checkMysteryWord();
     }
